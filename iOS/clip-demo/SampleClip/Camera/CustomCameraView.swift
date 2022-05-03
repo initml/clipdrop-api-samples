@@ -43,7 +43,7 @@ extension CustomCameraView {
       let imageData = image.jpegData(compressionQuality: 0.9)!
 
       let headers: HTTPHeaders = [
-        "x-api-key": "7ec132c33b823ef08fbbde76b3d1745cfe27b5f7521d1831b73f761b910c0a15919217e3caab8944a6283e9225ecf5cd "
+        "x-api-key": "YOUR_API_KEY_HERE"
       ]
 
       AF.upload(
@@ -55,20 +55,28 @@ extension CustomCameraView {
             mimeType: "image/jpeg"
           )
         },
-        to: "https://matting-dev-2fjujhplza-ez.a.run.app/",
+        to:"https://apis.clipdrop.co/remove-background/v1",
         headers: headers
       )
+      .validate()
       .responseData(queue: .global()) { response in
 
         Task { @MainActor in
           switch response.result {
           case .success: do {
-            if let imageReceived = UIImage.init(data: response.data!) {
+            if let dataSafe = response.data, let imageReceived = UIImage.init(data: dataSafe) {
               self.imageProcessed = imageReceived
               self.showProgress = false
               self.shouldShowOverlay = true
             } else {
-              print(response)
+              print("Data not processable")
+              self.errorText = Text("Data not processable")
+              self.showProgress = false
+              self.errorOcurred = true
+
+              if let dataSafe = response.data {
+                print(String.init(data: dataSafe, encoding: .utf8))
+              }
             }
           }
           case let .failure(error):
@@ -76,6 +84,10 @@ extension CustomCameraView {
             self.errorText = Text(error.localizedDescription)
             self.showProgress = false
             self.errorOcurred = true
+
+            if let dataSafe = response.data {
+              print(String.init(data: dataSafe, encoding: .utf8))
+            }
           }
         }
       }
@@ -95,16 +107,14 @@ struct CustomCameraView: View {
 
       Spacer().frame(height: 0)
         .alert(isPresented: $viewModel.errorOcurred, content: {
-          Alert(title: Text("api.error.genericCode"), message: viewModel.errorText, dismissButton: .default(Text("alert.okbutton"), action: {
-            print("actionnn")
-          }))
+          Alert(title: Text("A problem occured"), message: viewModel.errorText, dismissButton: .default(Text("Ok")))
         })
 
       Spacer().frame(height:0)
         .sheet(isPresented: $viewModel.isSharePresented, onDismiss: {
           viewModel.isSharePresented = false
         }, content: {
-          ActivityViewController(activityItems: [viewModel.imageProcessed as Any])
+          ActivityViewController(activityItems: [viewModel.imageProcessed?.pngData() as Any])
         })
 
       ZStack {
