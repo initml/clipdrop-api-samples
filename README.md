@@ -17,7 +17,7 @@ A minimal SwiftUI app that shows how to remove the background of any object usin
 
 # Web Samples
 
-## [ios/clip-demo](web/remove-background-bulk)
+## [web/remove-background-bulk](web/remove-background-bulk)
 
 A sample React/Typescript app that allows processing images in bulk
 
