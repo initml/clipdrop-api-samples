@@ -15,6 +15,17 @@ A minimal SwiftUI app that shows how to remove the background of any object usin
 <br/>
 <br/>
 
+# Android Samples
+
+## [android/ClipDropSample](android/ClipDropSample)
+
+A minimal Kotlin app that shows how to remove the background of any object using the camera.
+
+![166961421-e5e984ce-970b-41b6-abed-4c60d1d07d5d](https://user-images.githubusercontent.com/144372/167087847-18be1215-093b-4b4b-9d6d-40a0e4c34405.gif)
+
+<br/>
+<br/>
+
 # Web Samples
 
 ## [web/remove-background-bulk](web/remove-background-bulk)
