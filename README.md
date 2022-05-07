@@ -28,14 +28,6 @@ A minimal Kotlin app that shows how to remove the background of any object using
 
 # Web Samples
 
-## [web/remove-background-bulk](web/remove-background-bulk)
-
-A sample React/Typescript app that allows processing images in bulk
-
-Live app: https://remove-background-bulk.vercel.app
-
-![remove-background-bulk](docs/bulk.gif)
-
 ## [web/decompose-layers](web/decompose-layers)
 
 A sample React/Next.js/TailwindCSS app that decomposes images into separate layers.
@@ -43,3 +35,11 @@ A sample React/Next.js/TailwindCSS app that decomposes images into separate laye
 Live app: https://clipdrop-api-sample-decompose-layers.vercel.app
 
 ![decompose-layers](docs/decompose-web.gif)
+
+## [web/remove-background-bulk](web/remove-background-bulk)
+
+A sample React/Typescript app that allows processing images in bulk
+
+Live app: https://remove-background-bulk.vercel.app
+
+![remove-background-bulk](docs/bulk.gif)
