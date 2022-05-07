@@ -35,3 +35,11 @@ A sample React/Typescript app that allows processing images in bulk
 Live app: https://remove-background-bulk.vercel.app
 
 ![remove-background-bulk](docs/bulk.gif)
+
+## [web/decompose-layers](web/decompose-layers)
+
+A sample React/Next.js/TailwindCSS app that decomposes images into separate layers.
+
+Live app: https://clipdrop-api-sample-decompose-layers.vercel.app
+
+![decompose-layers](docs/decompose-web.gif)
