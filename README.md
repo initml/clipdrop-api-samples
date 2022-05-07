@@ -38,7 +38,7 @@ Live app: https://clipdrop-api-sample-decompose-layers.vercel.app
 
 ## [web/remove-background-bulk](web/remove-background-bulk)
 
-A sample React/Typescript app that allows processing images in bulk
+A sample React/Typescript app that allows processing images in bulk.
 
 Live app: https://remove-background-bulk.vercel.app
 

@@ -2,7 +2,7 @@
 
 A sample React/Next.js/TailwindCSS app that decomposes images into separate layers.
 
-![decompose-layers](../docs/decompose-web.gif)
+![decompose-layers](../../docs/decompose-web.gif)
 
 ### Setup:
 
