@@ -2,7 +2,7 @@
 
 ## Initialization
 
-- An Api Key **Must** be set to compile the sample in your **`local.propreties`** file
+- An API key **must** be set to compile the sample in your **`local.propreties`** file :
 ``` 
 apiKey="YOUR API KEY HERE"
 ```
@@ -24,8 +24,8 @@ apiKey="YOUR API KEY HERE"
 **2) API Request**
 - Get an Image Capture threw CameraX
 - Process the bitmap with the api : [full process here](https://clipdrop.co/apis/docs/remove-background)
-- Get an Bitmap with the result
+- Get a Bitmap with the result
 
 **3) Show Result / Share**
 - The result is shown in an ImageView
-- Can be shared threw a simple Intent
+- Can be shared via a simple Intent
