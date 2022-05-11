@@ -1,5 +1,8 @@
 # Clipdrop API Android Sample
 
+![telegram-cloud-document-4-6044047144808090677](https://user-images.githubusercontent.com/1808854/167869037-84e9fda9-2e05-465e-ab7d-839194e2d8d4.gif)
+
+
 ## Initialization
 
 - An API key **must** be set to compile the sample in your **`local.propreties`** file :
