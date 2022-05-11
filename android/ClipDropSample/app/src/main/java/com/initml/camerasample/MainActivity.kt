@@ -92,9 +92,10 @@ class MainActivity : AppCompatActivity() {
                     buffer.get(bytes)
                     val bitmapImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.size, null)
                     val bitmapRotate = bitmapImage.rotateBit(image)
+                    val bitmapScaled = Bitmap.createScaledBitmap(bitmapRotate, 800, bitmapRotate.height * 800 / bitmapRotate.width, true)
 
                     lifecycleScope.launchWhenCreated {
-                        bitmapRotate.clipApiProcess(object : BitmapListener {
+                        bitmapScaled.clipApiProcess(object : BitmapListener {
                             override fun onBitmapReceived(bitmap: Bitmap) {
                                 viewBinding.imageView.setImageBitmap(bitmap)
                                 viewBinding.imageView.isVisible = true
