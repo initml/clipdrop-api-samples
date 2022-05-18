@@ -1,5 +1,6 @@
 import { Switch } from '@headlessui/react'
 import { ReactNode } from 'react'
+import { twMerge } from 'tailwind-merge'
 
 interface ToggleProps {
   label: string | ReactNode
@@ -12,21 +13,26 @@ export default function Toggle(props: ToggleProps) {
 
   return (
     <Switch.Group>
-      <div className="inline-flex items-center">
-        <Switch.Label className="mr-4 font-bold opacity-70">{label}</Switch.Label>
+      <div className="inline-flex items-center drop-shadow-lg">
+        <Switch.Label className="mr-4 font-bold opacity-70">
+          {label}
+        </Switch.Label>
         <Switch
           checked={enabled}
           onChange={setEnabled}
-          className={`${
-            enabled ? 'bg-blue-600' : 'bg-gray-200'
-          } relative inline-flex items-center h-6 rounded-full w-11`}
+          className={twMerge(
+            enabled
+              ? 'bg-blue-600'
+              : 'border border-white border-opacity-30 bg-white bg-opacity-40 backdrop-blur-lg',
+            'relative inline-flex h-7 w-12 items-center rounded-full'
+          )}
         >
           <span
-            className={`
-            transform transition ease-in-out duration-200 
-            ${
-              enabled ? 'bg-white translate-x-6' : 'bg-gray-600 translate-x-1'
-            } inline-block w-4 h-4 transform  rounded-full`}
+            className={twMerge(
+              'transform transition duration-200 ease-in-out',
+              enabled ? 'translate-x-6 bg-white' : 'translate-x-1 bg-black',
+              'inline-block h-5 w-5 transform  rounded-full'
+            )}
           />
         </Switch>
       </div>

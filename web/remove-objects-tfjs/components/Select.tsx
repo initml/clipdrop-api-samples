@@ -1,4 +1,5 @@
 import { Listbox, Transition } from '@headlessui/react'
+import pluralize from 'pluralize'
 import { ReactNode } from 'react'
 import { twMerge } from 'tailwind-merge'
 
@@ -25,14 +26,23 @@ export default function Select({ label, value, onChange, items }: SelectProps) {
               </Listbox.Label>
             )}
             <span className="inline-block rounded-md">
-              <Listbox.Button className="relative w-full cursor-default rounded-2xl border border-gray-300 bg-white pb-2 pt-1 pl-3 pr-8 text-left transition duration-150  ease-in-out hover:border-gray-400 focus:outline-none sm:text-sm sm:leading-5">
+              <Listbox.Button
+                className={twMerge(
+                  'relative w-full cursor-default rounded-2xl',
+                  'pb-2 pt-1 pl-3 pr-8 text-left',
+                  'border border-gray-300 bg-white bg-opacity-20',
+                  'transition duration-150 ease-in-out',
+                  'hover:border-gray-400 focus:outline-none',
+                  'sm:text-sm sm:leading-5'
+                )}
+              >
                 <span
                   className={twMerge(
                     'text-2xl md:text-4xl',
                     'bg-gradient-to-tr from-cyan-500 to-blue-600 bg-clip-text font-bold text-transparent'
                   )}
                 >
-                  {items.find((i) => i.value === value)?.name}s
+                  {items.find((i) => i.value === value)?.name}
                 </span>
                 <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-1">
                   <svg
@@ -55,7 +65,11 @@ export default function Select({ label, value, onChange, items }: SelectProps) {
                 leave="transition ease-in duration-100"
                 leaveFrom="opacity-100"
                 leaveTo="opacity-0"
-                className="absolute z-20 mt-1 min-w-full rounded-md bg-white shadow-lg"
+                className={twMerge(
+                  'absolute z-20 mt-1 min-w-full rounded-2xl',
+                  'border border-gray-300 ',
+                  'bg-white bg-opacity-50 p-4 shadow-lg backdrop-blur-sm'
+                )}
               >
                 <Listbox.Options
                   static
@@ -66,13 +80,12 @@ export default function Select({ label, value, onChange, items }: SelectProps) {
                       {({ active }) => (
                         <div
                           className={twMerge(
-                            active ? 'text-black' : 'text-gray-900',
+                            active ? '' : 'text-gray-900',
                             'whitespace-nowrap',
                             'relative cursor-default select-none py-2 px-4',
-                            'text-left text-2xl md:text-4xl',
+                            'text-left text-xl md:text-3xl',
                             'bg-gradient-to-tr from-black to-black bg-clip-text font-bold text-transparent hover:from-cyan-500 hover:to-blue-600',
                             'cursor-pointer'
-                            // 'hover:text-black hover:bg-gray-200'
                           )}
                         >
                           {item.name}

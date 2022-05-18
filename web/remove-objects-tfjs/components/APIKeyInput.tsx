@@ -12,7 +12,13 @@ export default function APIKeyInput(props: any) {
         autoComplete="API Key"
         type="password"
         required
-        className="relative my-4 block w-full appearance-none rounded-md border border-gray-300 px-3 py-3 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+        className={twMerge(
+          'border border-white border-opacity-20 bg-white bg-opacity-40 backdrop-blur-lg',
+          'drop-shadow-lg',
+          'relative my-4 block w-full appearance-none rounded-xl focus:z-10',
+          'px-3 py-3 placeholder-gray-500',
+          'focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm'
+        )}
         placeholder="Your ClipDrop API Key"
         value={value}
         onChange={(ev) => onChange(ev.currentTarget.value)}

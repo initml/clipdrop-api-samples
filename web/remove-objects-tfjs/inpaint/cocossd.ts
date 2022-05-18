@@ -76,6 +76,5 @@ export default async function cocossd(
       mask,
     })
   }
-  console.log(detectedClasses)
   return results
 }

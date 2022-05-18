@@ -1,5 +1,6 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
+import pluralize from 'pluralize'
 import { useEffect, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import APIKeyInput from '../components/APIKeyInput'
@@ -7,9 +8,10 @@ import Landing from '../components/Landing'
 import Result from '../components/Result'
 import Select from '../components/Select'
 import TextAnim from '../components/TextAnim'
-import TFJsLogo from '../components/tfjs-logo.svg'
+import TFJsLogo from '../components/TF_js.png'
 import Toggle from '../components/Toggle'
-import { cocoSSDClasses } from '../decompose/cocossd'
+import { cocoSSDClasses } from '../inpaint/cocossd'
+import GradientImage from '../components/gradient.webp'
 
 const Home: NextPage = () => {
   const [file, setFile] = useState<File | undefined>()
@@ -33,22 +35,35 @@ const Home: NextPage = () => {
   }, [detectedClasses])
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center">
+    <div
+      className="flex min-h-screen flex-col items-center justify-center text-black"
+      style={{
+        // background: '#222',
+        backgroundImage: `url(${GradientImage.src})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
       <Head>
         <title>ClipDrop API - Remove People</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <header className="flex w-full justify-between px-4 pl-8">
+      <header
+        className={twMerge(
+          'flex w-full justify-center px-4 pl-8 sm:justify-between',
+          'bg-white bg-opacity-40 shadow-sm backdrop-blur-lg'
+        )}
+      >
         <div className="flex items-center space-x-4">
           <h1
             className={twMerge(
-              'text-xl font-bold',
+              'h-20 text-xl font-bold',
               'inline-flex items-center space-x-4'
             )}
           >
             <a
-              className="bg-gradient-to-tr from-cyan-500 to-blue-600 bg-clip-text text-transparent"
+              // className="bg-gradient-to-tr from-cyan-500 to-blue-600 bg-clip-text text-transparent"
               href="https://clipdrop.co/apis?utm_source=api-sample&utm_medium=decompose-layers"
               target="_blank"
               rel="noopener noreferrer"
@@ -57,21 +72,19 @@ const Home: NextPage = () => {
             </a>
             <span>×</span>
             <a
-              className="inline-flex items-center space-x-4 text-gray-500"
-              href="https://clipdrop.co/apis?utm_source=api-sample&utm_medium=decompose-layers"
+              href="https://clipdrop.co/apis?utm_s  ource=api-sample&utm_medium=decompose-layers"
               target="_blank"
               rel="noopener noreferrer"
             >
               <img
                 src={TFJsLogo.src}
                 alt="tfjs logo"
-                className="mr-2 inline h-8"
+                className="mr-2 inline h-10"
               />
-              Tensorflow.js
             </a>
           </h1>
         </div>
-        <div className="flex items-center space-x-12">
+        <div className="hidden items-center space-x-12 sm:flex">
           <Toggle label="HD" enabled={hd} setEnabled={setHD} />
           <APIKeyInput
             value={apiKey}
@@ -90,8 +103,7 @@ const Home: NextPage = () => {
             'mb-8 max-w-4xl font-bold'
           )}
         >
-          Automagically remove
-          <br />
+          Automagically remove{' '}
           {detectedClasses && classToShow ? (
             <Select
               items={detectedClasses.map((c) => ({ value: c, name: c }))}
@@ -99,12 +111,17 @@ const Home: NextPage = () => {
               onChange={setClassToShow}
             />
           ) : (
-            <TextAnim texts={cocoSSDClasses} />
+            <TextAnim texts={cocoSSDClasses.map((c) => pluralize(c))} />
           )}{' '}
-          from your images
+          {!file && 'from your images'}
         </h1>
         {!file && (
-          <p className="max-w-2xl font-bold text-gray-400">
+          <p
+            className={twMerge(
+              'max-w-2xl font-bold '
+              // 'bg-gradient-to-tr from-cyan-500 to-blue-600 bg-clip-text text-transparent'
+            )}
+          >
             An open-source demo using Tensorflow.js COCOSSD for object detection
             and the ClipDrop API for inpainting.
           </p>
@@ -123,7 +140,12 @@ const Home: NextPage = () => {
         )}
       </main>
 
-      <footer className="mt-4 flex h-24 w-full items-center justify-center space-x-12 border-t">
+      <footer
+        className={twMerge(
+          'mt-4 flex h-24 w-full items-center justify-center space-x-12',
+          'border-t border-black border-opacity-5 bg-white bg-opacity-40 backdrop-blur-lg'
+        )}
+      >
         <span>
           Powered by{' '}
           <a
@@ -135,7 +157,7 @@ const Home: NextPage = () => {
           </a>{' '}
           and{' '}
           <a
-            href="https://clipdrop.co/apis?utm_source=api-sample&utm_medium=decompose-layers"
+            href="https://www.tensorflow.org/js"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -144,7 +166,7 @@ const Home: NextPage = () => {
         </span>
         <p id="forkongithub">
           <a
-            href="https://github.com/initml/clipdrop-api-samples"
+            href="https://github.com/initml/clipdrop-api-samples/tree/main/web/remove-objects-tfjs"
             target="_blank"
             rel="noopener noreferrer"
           >

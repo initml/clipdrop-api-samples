@@ -1,6 +1,6 @@
 // A component that periodically changes the text of a text element with an animation
-
 import { useCallback, useEffect, useState } from 'react'
+import pluralize from 'pluralize'
 
 interface TextAnimProps {
   texts: string[]
@@ -22,7 +22,7 @@ export default function TextAnim({ texts }: TextAnimProps) {
 
   return (
     <span className="bg-gradient-to-tr from-cyan-500 to-blue-600 bg-clip-text text-transparent">
-      {current}s
+      {current}
     </span>
   )
 }

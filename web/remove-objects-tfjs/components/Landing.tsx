@@ -38,6 +38,8 @@ export default function Landing({ file, setFile, apiKey }: LandingProps) {
           'mt-16',
           'w-full overflow-hidden rounded-3xl',
           'border-4 border-dashed border-black',
+          ' bg-white bg-opacity-30 backdrop-blur-lg',
+          'hover:bg-opacity-100 hover:border-blue-500 hover:text-blue-500',
           !apiKey ? 'pointer-events-none opacity-10' : ''
         )}
       >
@@ -51,7 +53,6 @@ export default function Landing({ file, setFile, apiKey }: LandingProps) {
               'flex-col items-center justify-center',
               'px-8 py-8 text-center sm:py-16',
               'cursor-pointer',
-              'hover:bg-gray-100',
               dragging ? 'opacity-50' : ''
             )}
             onClick={() => inputFileRef.current?.click()}

@@ -1,8 +1,9 @@
+import pluralize from 'pluralize'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
-import inpainting from '../decompose'
-import cocossd, { CocoSSDResult } from '../decompose/cocossd'
-import { blobToCanvas, downloadImage } from '../decompose/utils'
+import inpainting from '../inpaint'
+import cocossd, { CocoSSDResult } from '../inpaint/cocossd'
+import { blobToCanvas, downloadImage } from '../inpaint/utils'
 
 interface ResultProps {
   apiKey: string
@@ -47,7 +48,7 @@ export default function Result({
       }
       return { image, results }
     } catch (e: any) {
-      console.log(e)
+      console.error(e)
       alert(e.Error || e.message)
       reset()
       return { image: undefined, results: undefined }
@@ -63,9 +64,13 @@ export default function Result({
     setSrc(newSrc)
     process(file).then(({ image, results }) => {
       setOriginal(image)
-      setDetectedObjects(results)
+      setDetectedObjects(
+        results?.map((r) => ({ ...r, class: pluralize(r.class) }))
+      )
 
-      const detectedClasses = Array.from(new Set(results?.map((r) => r.class)))
+      const detectedClasses = Array.from(
+        new Set(results?.map((r) => pluralize(r.class)))
+      )
       setDetectedClasses(detectedClasses)
     })
   }, [file])
@@ -75,12 +80,12 @@ export default function Result({
     if (!classToShow) {
       return
     }
-    setProcessing(true)
-    setIsForegroundLoaded(false)
     const data = detectedObjects?.find((r) => r.class === classToShow)
     if (!original || !data?.mask) {
       return
     }
+    setProcessing(true)
+    setIsForegroundLoaded(false)
     inpainting(original, data?.mask, apiKey, hd)
       .then((result) => {
         setSrc(result.toDataURL())
@@ -88,7 +93,7 @@ export default function Result({
         setProcessing(false)
       })
       .catch((e) => {
-        console.log(e)
+        console.error(e)
         alert(e.error || e.message || e)
         reset()
       })
@@ -103,8 +108,7 @@ export default function Result({
         <img
           src={src}
           className={twMerge(
-            'max-h-[calc(100vh-450px)] rounded-md transition-all duration-700',
-            'border border-opacity-100'
+            'max-h-[calc(100vh-450px)] rounded-md transition-all duration-700'
           )}
           alt="Image"
         />
@@ -115,7 +119,6 @@ export default function Result({
             className={twMerge(
               'absolute top-0',
               'max-h-[calc(100vh-450px)] rounded-md transition-all duration-700',
-              'border border-opacity-30',
               isForegroundLoaded ? 'opacity-0' : 'opacity-100'
             )}
             alt="Image"
@@ -145,10 +148,7 @@ export default function Result({
         >
           <button
             onClick={reset}
-            className={twMerge(
-              'h-full rounded-lg px-10 font-semibold text-black',
-              'border border-black border-opacity-20 hover:bg-gray-100'
-            )}
+            className={twMerge('h-full rounded-lg px-10 font-semibold border hover:border-blue-500')}
           >
             Back
           </button>
