@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { removeText } from '../remove-text'
-import { downloadImage } from '../decompose/utils'
+import { downloadImage } from '../utils'
 import { parse } from 'path'
 
 interface ResultProps {
