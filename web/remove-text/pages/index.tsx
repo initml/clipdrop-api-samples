@@ -40,7 +40,6 @@ const Home: NextPage = () => {
           </p>
         </div>
         <div className="flex items-center space-x-12">
-          <Toggle label="HD" enabled={hd} setEnabled={setHD} />
           <APIKeyInput
             value={apiKey}
             onChange={(value: string) => {
