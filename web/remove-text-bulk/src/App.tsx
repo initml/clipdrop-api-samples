@@ -4,7 +4,7 @@ import Gallery from './Gallery'
 import Queue from './Queue'
 import Upload from './Upload'
 import { downloadBlob, sleep } from './utils'
-import { removeWatermark } from './RemoveWatermark'
+import { removeText } from './RemoveText'
 
 function App() {
   const [queue, setQueue] = useState<Array<Item>>([])
@@ -42,7 +42,7 @@ function App() {
       setQueue(newQueue)
 
       try {
-        item.cleanup = await removeWatermark(item, apiKey)
+        item.cleanup = await removeText(item, apiKey)
 
         console.log('MARK AS DONE')
         item.status = 'done'

@@ -49,10 +49,7 @@ const getImageSize = async function (file: File): Promise<[number, number]> {
   })
 }
 
-export async function removeWatermark(
-  item: Item,
-  apiKey: string
-): Promise<Cleanup> {
+export async function removeText(item: Item, apiKey: string): Promise<Cleanup> {
   return new Promise(async (resolve, reject) => {
     try {
       if (MOCK_API_CALL) {
