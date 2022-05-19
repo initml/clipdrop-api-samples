@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.scan {
+  width: 200px;
+  height: 200px;
+}
+.scan::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 5px;
+  background: #fff;
+  box-shadow: 0 0 70px 20px #fff;
+  clip-path: inset(0);
+  animation: x 0.75s ease-in-out infinite alternate, y 1.5s ease-in-out infinite;
+}
+
+@keyframes x {
+  to {
+    transform: translateX(-100%);
+    left: 100%;
+  }
+}
+
+@keyframes y {
+  33% {
+    clip-path: inset(0 0 0 -100px);
+  }
+  50% {
+    clip-path: inset(0 0 0 0);
+  }
+  83% {
+    clip-path: inset(0 -100px 0 0);
+  }
+}
