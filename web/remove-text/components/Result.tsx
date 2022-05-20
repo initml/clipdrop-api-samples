@@ -30,12 +30,17 @@ export default function Result({ file, setFile, apiKey, hd }: ResultProps) {
     setProcessing(true)
     // return
     removeText(file, apiKey)
-      .then((cleanup) => {
-        setSrc(cleanup.base64)
-        setProcessing(false)
-      })
+      .then(
+        (cleanup) => {
+          setSrc(cleanup.base64)
+          setProcessing(false)
+        },
+        (e) => {
+          throw e
+        }
+      )
       .catch((e) => {
-        console.error(e)
+        console.error('error in result', e)
         alert(e.Error || e.message)
         reset()
       })

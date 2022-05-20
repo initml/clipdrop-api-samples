@@ -81,7 +81,11 @@ export async function removeText(file: File, apiKey: string): Promise<Cleanup> {
       const jsonResponse = await detection.json()
 
       const response = jsonResponse.responses[0]
-      const boxes = response.fullTextAnnotation.pages[0].blocks
+      const page = response?.fullTextAnnotation?.pages[0]
+      if (!page) {
+        throw new Error('no text found')
+      }
+      const boxes = page.blocks
         .map((b: any) => b.paragraphs.map((p: any) => p.boundingBox.vertices))
         .flat()
       const canvas = document.createElement('canvas')
@@ -115,47 +119,51 @@ export async function removeText(file: File, apiKey: string): Promise<Cleanup> {
 
         // Send to cleanup API
         canvas.toBlob(async (b: Blob | null) => {
-          if (!b) {
-            throw new Error('could not convert canvas to blob')
+          try {
+            if (!b) {
+              throw new Error('could not convert canvas to blob')
+            }
+            const mask = new File([b], 'mask.png', {
+              type: 'image/png',
+            })
+            const data = new FormData()
+            data.append('image_file', file)
+            data.append('mask_file', mask)
+
+            const res = await fetch(CLEANUP_API_ENDPOINT, {
+              method: 'POST',
+              body: data,
+              headers: {
+                'x-api-key': apiKey,
+              },
+            })
+
+            const resultArrayBuffer = await res.arrayBuffer()
+            const resultFile = new File([resultArrayBuffer], 'result.png', {
+              type: 'image/png',
+            })
+            const reader = new FileReader()
+            reader.addEventListener(
+              'load',
+              function () {
+                if (!reader.result) {
+                  return
+                }
+                resolve({
+                  base64: reader.result.toString(),
+                })
+              },
+              false
+            )
+            reader.readAsDataURL(resultFile)
+          } catch (error) {
+            reject(error)
           }
-          const mask = new File([b], 'mask.png', {
-            type: 'image/png',
-          })
-          const data = new FormData()
-          data.append('image_file', file)
-          data.append('mask_file', mask)
-
-          const res = await fetch(CLEANUP_API_ENDPOINT, {
-            method: 'POST',
-            body: data,
-            headers: {
-              'x-api-key': apiKey,
-            },
-          })
-
-          const resultArrayBuffer = await res.arrayBuffer()
-          const resultFile = new File([resultArrayBuffer], 'result.png', {
-            type: 'image/png',
-          })
-          const reader = new FileReader()
-          reader.addEventListener(
-            'load',
-            function () {
-              if (!reader.result) {
-                return
-              }
-              resolve({
-                base64: reader.result.toString(),
-              })
-            },
-            false
-          )
-          reader.readAsDataURL(resultFile)
         })
       }
     } catch (e) {
-      console.error(e)
-      throw e
+      console.error('error in remove text', e)
+      reject(e)
     }
   })
 }
