@@ -34,7 +34,7 @@ export default async function decompose(
     body: payload,
   })
   if (!response.ok) {
-    throw await response.text()
+    throw await response.json()
   }
   const maskedBlob = await response.blob()
   const foreground = await blobToCanvas(maskedBlob)
