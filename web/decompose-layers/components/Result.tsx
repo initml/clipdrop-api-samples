@@ -43,7 +43,7 @@ export default function Result({ file, setFile, apiKey, hd }: ResultProps) {
       })
       .catch((e) => {
         console.log(e)
-        alert(e.Error || e.message)
+        alert(e.error || e.message)
         reset()
       })
       .finally(() => {
