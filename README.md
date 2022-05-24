@@ -44,6 +44,14 @@ A sample TensorflowJS/React/Next.js/TailwindCSS app that detects object bounding
 
 ![remove-objects-tfjs](docs/remove-objects-tfjs.gif)
 
+## [web/remove-text](web/remove-text)
+
+A sample Next.js/TailwindCSS app that detects text using the Cloud Vision API and uses ClipDrop API's inpainting to automatically remove the detected texts.
+
+**⚡️ Live app:** https://clipdrop-api-samples-text-remover.vercel.app
+
+![FTguR51UEAEEZGh](https://user-images.githubusercontent.com/144372/169997829-c5aa0120-7768-4b46-ba01-b09530e5c3b6.jpeg)
+
 ## [web/remove-background-bulk](web/remove-background-bulk)
 
 A sample React/Typescript app that allows processing images in bulk.
