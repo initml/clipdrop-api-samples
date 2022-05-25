@@ -77,6 +77,9 @@ export async function removeText(file: File, apiKey: string): Promise<Cleanup> {
           ],
         }),
       })
+      if (!detection.ok) {
+        throw new Error('could not call text detection API')
+      }
       const jsonResponse = await detection.json()
 
       const response = jsonResponse.responses[0]
@@ -136,6 +139,9 @@ export async function removeText(file: File, apiKey: string): Promise<Cleanup> {
                 'x-api-key': apiKey,
               },
             })
+            if (!res.ok) {
+              throw await res.json()
+            }
 
             const resultArrayBuffer = await res.arrayBuffer()
             const resultFile = new File([resultArrayBuffer], 'result.png', {
