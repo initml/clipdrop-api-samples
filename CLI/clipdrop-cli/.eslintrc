@@ -2,5 +2,11 @@
   "extends": [
     "oclif",
     "oclif-typescript"
-  ]
+  ],
+  "rules": {
+    "quotes": ["error", "single"],
+    "object-curly-spacing": ["error", "always"],
+    "semi": ["error", "never"],
+    "@typescript-eslint/explicit-module-boundary-types": "off"
+  }
 }
