@@ -23,7 +23,8 @@
     "axios": "^0.27.2",
     "conf": "^10.1.2",
     "form-data": "^4.0.0",
-    "mime-types": "^2.1.35"
+    "mime-types": "^2.1.35",
+    "oclif-plugin-completion": "^0.6.0"
   },
   "devDependencies": {
     "@oclif/test": "^2",
@@ -49,7 +50,8 @@
     "commands": "./dist/commands",
     "plugins": [
       "@oclif/plugin-help",
-      "@oclif/plugin-plugins"
+      "@oclif/plugin-plugins",
+      "oclif-plugin-completion"
     ],
     "topicSeparator": " ",
     "topics": {
