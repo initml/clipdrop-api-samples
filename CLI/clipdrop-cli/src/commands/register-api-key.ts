@@ -1,5 +1,5 @@
 import { Command } from '@oclif/core'
-import { STORE_API_KEY } from '../Constants'
+import { STORE_API_KEY } from '../constants'
 import { set } from '../tools/store'
 
 export default class RegisterApiKey extends Command {
