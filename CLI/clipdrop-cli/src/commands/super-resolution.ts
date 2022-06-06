@@ -42,8 +42,6 @@ export default class SuperResolution extends Command {
 
     CliUx.ux.action.start(`Processing super resolution for : ${flags.image}`)
 
-    // this.log('')
-
     const paths = flags.image.split('/')
     const filename = paths[paths.length - 1]
     const file = await fs.readFile(flags.image)
@@ -63,8 +61,10 @@ export default class SuperResolution extends Command {
         responseType: 'arraybuffer',
       })
 
+      CliUx.ux.action.stop()
+
       await fs.writeFile(flags.output, result.data)
-      this.log('File written at : ', flags.output)
+      this.log(`\n\nFile written at : ${flags.output}`)
       this.log(`\n${result.headers['x-remaining-credits']} credits remain`)
     } catch (error) {
       if (error instanceof AxiosError) {
