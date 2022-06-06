@@ -1,4 +1,4 @@
-import { Command, Flags } from '@oclif/core'
+import { Command, Flags, CliUx } from '@oclif/core'
 import axios, { AxiosError } from 'axios'
 import * as fs from 'node:fs/promises'
 import * as FormData from 'form-data'
@@ -40,7 +40,9 @@ export default class SuperResolution extends Command {
       throw new TypeError('No API key configured')
     }
 
-    this.log('Processing super resolution for : ', flags.image)
+    CliUx.ux.action.start(`Processing super resolution for : ${flags.image}`)
+
+    // this.log('')
 
     const paths = flags.image.split('/')
     const filename = paths[paths.length - 1]

@@ -29,6 +29,7 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
+* [`initml cleanup`](#initml-cleanup)
 * [`initml hello PERSON`](#initml-hello-person)
 * [`initml hello world`](#initml-hello-world)
 * [`initml help [COMMAND]`](#initml-help-command)
@@ -41,6 +42,31 @@ USAGE
 * [`initml plugins:uninstall PLUGIN...`](#initml-pluginsuninstall-plugin-1)
 * [`initml plugins:uninstall PLUGIN...`](#initml-pluginsuninstall-plugin-2)
 * [`initml plugins update`](#initml-plugins-update)
+* [`initml register-api-key KEY`](#initml-register-api-key-key)
+* [`initml remove-background`](#initml-remove-background)
+* [`initml super-resolution`](#initml-super-resolution)
+
+## `initml cleanup`
+
+describe the command here
+
+```
+USAGE
+  $ initml cleanup -i <value> -m <value> -o <value>
+
+FLAGS
+  -i, --image=<value>   (required) Image to process
+  -m, --mask=<value>    (required) Related mask
+  -o, --output=<value>  (required) Result destination
+
+DESCRIPTION
+  describe the command here
+
+EXAMPLES
+  $ initml cleanup
+```
+
+_See code: [dist/commands/cleanup.ts](https://github.com/initml/clipdrop-api-samples/blob/v0.0.0/dist/commands/cleanup.ts)_
 
 ## `initml hello PERSON`
 
@@ -331,4 +357,67 @@ FLAGS
 DESCRIPTION
   Update installed plugins.
 ```
+
+## `initml register-api-key KEY`
+
+describe the command here
+
+```
+USAGE
+  $ initml register-api-key [KEY]
+
+ARGUMENTS
+  KEY  API token to register
+
+DESCRIPTION
+  describe the command here
+
+EXAMPLES
+  $ initml register-api-key <key>
+```
+
+_See code: [dist/commands/register-api-key.ts](https://github.com/initml/clipdrop-api-samples/blob/v0.0.0/dist/commands/register-api-key.ts)_
+
+## `initml remove-background`
+
+describe the command here
+
+```
+USAGE
+  $ initml remove-background -i <value> -o <value>
+
+FLAGS
+  -i, --image=<value>   (required) Image to process
+  -o, --output=<value>  (required) Result destination
+
+DESCRIPTION
+  describe the command here
+
+EXAMPLES
+  $ initml remove-background
+```
+
+_See code: [dist/commands/remove-background.ts](https://github.com/initml/clipdrop-api-samples/blob/v0.0.0/dist/commands/remove-background.ts)_
+
+## `initml super-resolution`
+
+describe the command here
+
+```
+USAGE
+  $ initml super-resolution -i <value> -o <value> [-s 2|4]
+
+FLAGS
+  -i, --image=<value>   (required) Image to process
+  -o, --output=<value>  (required) Result destination
+  -s, --scale=(2|4)     [default: 2] Scale applied to your picture
+
+DESCRIPTION
+  describe the command here
+
+EXAMPLES
+  $ initml super-resolution
+```
+
+_See code: [dist/commands/super-resolution.ts](https://github.com/initml/clipdrop-api-samples/blob/v0.0.0/dist/commands/super-resolution.ts)_
 <!-- commandsstop -->
