@@ -1,4 +1,4 @@
-import { Command, Flags } from '@oclif/core'
+import { Command, Flags, CliUx } from '@oclif/core'
 import axios, { AxiosError } from 'axios'
 import * as fs from 'node:fs/promises'
 import * as FormData from 'form-data'
@@ -34,7 +34,7 @@ export default class RemoveBackground extends Command {
       throw new TypeError('No API key configured')
     }
 
-    this.log('Processing remove background for : ', flags.image)
+    CliUx.ux.action.start(`Processing remove background for : ${flags.image}`)
 
     const paths = flags.image.split('/')
     const filename = paths[paths.length - 1]
@@ -54,8 +54,10 @@ export default class RemoveBackground extends Command {
         responseType: 'arraybuffer',
       })
 
+      CliUx.ux.action.stop()
+
       await fs.writeFile(flags.output, result.data)
-      this.log('File written at : ', flags.output)
+      this.log('\n\nFile written at : ', flags.output)
       this.log(`\n${result.headers['x-remaining-credits']} credits remain`)
     } catch (error) {
       if (error instanceof AxiosError) {
