@@ -1,6 +1,6 @@
 {
   "name": "@clipdrop/cli",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Use our advanced ML models to improve your image directly from a CLI",
   "author": "Igor ESCHALIER",
   "bin": {
@@ -64,8 +64,8 @@
     "build": "shx rm -rf dist && tsc -b",
     "lint": "eslint . --ext .ts --config .eslintrc",
     "postpack": "shx rm -f oclif.manifest.json",
-    "posttest": "yarn lint",
-    "prepack": "yarn build && oclif manifest && oclif readme",
+    "posttest": "npm run lint",
+    "prepack": "npm run build && oclif manifest && oclif readme",
     "test": "mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif readme && git add README.md"
   },

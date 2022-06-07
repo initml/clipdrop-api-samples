@@ -6,6 +6,7 @@ import * as mime from 'mime-types'
 
 import { FUNCTION_CLEANUP, STORE_API_KEY } from '../constants'
 import { get } from '../tools/store'
+import extendFileName from '../tools/extend-file-name'
 
 export default class Cleanup extends Command {
   static description = 'Remove objects on a picture'
@@ -26,7 +27,6 @@ export default class Cleanup extends Command {
     output: Flags.string({
       char: 'o',
       description: 'Result destination',
-      required: true,
     }),
   }
 
@@ -69,8 +69,10 @@ export default class Cleanup extends Command {
 
       CliUx.ux.action.stop()
 
-      await fs.writeFile(flags.output, result.data)
-      this.log('\n\nFile written at : ', flags.output)
+      const output = flags.output || extendFileName(flags.image, '-cleanup')
+
+      await fs.writeFile(output, result.data)
+      this.log('\n\nFile written at : ', output)
       this.log(`\n${result.headers['x-remaining-credits']} credits remain`)
     } catch (error) {
       if (error instanceof AxiosError) {
