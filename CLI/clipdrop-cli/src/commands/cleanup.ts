@@ -8,7 +8,7 @@ import { FUNCTION_CLEANUP, STORE_API_KEY } from '../constants'
 import { get } from '../tools/store'
 
 export default class Cleanup extends Command {
-  static description = 'describe the command here'
+  static description = 'Remove objects on a picture'
 
   static examples = ['<%= config.bin %> <%= command.id %>']
 

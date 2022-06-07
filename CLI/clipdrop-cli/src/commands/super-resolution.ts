@@ -8,7 +8,7 @@ import { FUNCTION_SUPER_RESOLUTION, STORE_API_KEY } from '../constants'
 import { get } from '../tools/store'
 
 export default class SuperResolution extends Command {
-  static description = 'describe the command here'
+  static description = 'Upscale the resolution of a picture'
 
   static examples = ['<%= config.bin %> <%= command.id %>']
 

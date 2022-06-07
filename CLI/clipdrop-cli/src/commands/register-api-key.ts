@@ -3,7 +3,7 @@ import { STORE_API_KEY } from '../constants'
 import { set } from '../tools/store'
 
 export default class RegisterApiKey extends Command {
-  static description = 'describe the command here'
+  static description = 'Register the ClipDrop API key'
 
   static examples = ['<%= config.bin %> <%= command.id %> <key>']
 
