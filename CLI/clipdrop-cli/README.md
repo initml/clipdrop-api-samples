@@ -16,11 +16,11 @@ oclif example Hello World CLI
 # Usage
 <!-- usage -->
 ```sh-session
-$ npm install -g @initml/cli
+$ npm install -g @clipdrop/cli
 $ initml COMMAND
 running command...
 $ initml (--version)
-@initml/cli/0.1.0 darwin-arm64 node-v16.15.0
+@clipdrop/cli/0.1.0 darwin-arm64 node-v16.15.0
 $ initml --help [COMMAND]
 USAGE
   $ initml COMMAND
