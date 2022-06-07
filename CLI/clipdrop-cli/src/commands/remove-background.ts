@@ -8,7 +8,7 @@ import { FUNCTION_REMOVE_BACKGROUND, STORE_API_KEY } from '../constants'
 import { get } from '../tools/store'
 
 export default class RemoveBackground extends Command {
-  static description = 'describe the command here'
+  static description = 'Remove the background of a picture'
 
   static examples = ['<%= config.bin %> <%= command.id %>']
 
