@@ -177,15 +177,13 @@ for file in files:
                 file_out = join(file_system['out'],
                                 f'{name}.{args.output_format}')
                 call_remove_background_api(file_in, file_out)
-            if args.join:
-                join_imgs([file_in, file_out], file_out)
         elif args.api == 'super-resolution':
             file_in = join(file_system['in'], file)
             name = os.path.splitext(file)[0]
             file_out = join(file_system['out'], f'{name}.{args.output_format}')
             call_super_resolution_api(file_in, file_out, args.upscale)
-            if args.join:
-                join_imgs([file_in, file_out], file_out)
+        if args.join:
+            join_imgs([file_in, file_out], file_out)
         end = time.time()
         print(f'{file} processed in {end - start} seconds')
 
