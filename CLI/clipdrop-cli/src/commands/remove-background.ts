@@ -1,12 +1,15 @@
 import { Command, Flags, CliUx } from '@oclif/core'
 import axios, { AxiosError } from 'axios'
+import { existsSync } from 'node:fs'
 import * as fs from 'node:fs/promises'
+import * as path from 'node:path'
 import * as FormData from 'form-data'
 import * as mime from 'mime-types'
 
 import { FUNCTION_REMOVE_BACKGROUND, STORE_API_KEY } from '../constants'
 import { get } from '../tools/store'
 import extendFileName from '../tools/extend-file-name'
+import queryImages from '../tools/query-images'
 
 export default class RemoveBackground extends Command {
   static description = 'Remove the background of a picture'
@@ -16,12 +19,22 @@ export default class RemoveBackground extends Command {
   static flags = {
     image: Flags.string({
       char: 'i',
-      description: 'Image to process',
+      description:
+        'Image to process can be glob pattern like "/path/to/image/*.jpg"',
       required: true,
+      multiple: true,
+    }),
+    folder: Flags.string({
+      char: 'f',
+      description:
+        'Result destination folder, can be useFull with multi process',
+      exclusive: ['output'],
     }),
     output: Flags.string({
       char: 'o',
       description: 'Result destination',
+      multiple: true,
+      exclusive: ['folder'],
     }),
   }
 
@@ -34,15 +47,45 @@ export default class RemoveBackground extends Command {
       throw new TypeError('No API key configured')
     }
 
-    CliUx.ux.action.start(`Processing remove background for : ${flags.image}`)
+    const uniqueImages = await queryImages(flags.image)
 
-    const paths = flags.image.split('/')
+    this.log('images to process', uniqueImages)
+    this.log('\n\n')
+    CliUx.ux.action.start('processing')
+
+    for (const [index, image] of uniqueImages.entries()) {
+      // eslint-disable-next-line no-await-in-loop
+      await this.process(key, {
+        image,
+        output: flags.output?.[index],
+        folder: flags.folder,
+      })
+    }
+
+    CliUx.ux.action.stop()
+  }
+
+  public async process(
+    key: string,
+    {
+      image,
+      output: cliOutput,
+      folder,
+    }: {
+      image: string
+      output?: string
+      folder?: string
+    },
+  ): Promise<void> {
+    this.log(`Processing remove background for : ${image}`)
+
+    const paths = image.split('/')
     const filename = paths[paths.length - 1]
-    const file = await fs.readFile(flags.image)
+    const file = await fs.readFile(image)
 
     const data = new FormData()
     data.append('image_file', file, {
-      contentType: mime.lookup(flags.image) || undefined,
+      contentType: mime.lookup(image) || undefined,
       filename,
     })
 
@@ -54,10 +97,14 @@ export default class RemoveBackground extends Command {
         responseType: 'arraybuffer',
       })
 
-      CliUx.ux.action.stop()
+      const selectedOutput = folder ? `${folder}/${filename}` : cliOutput
+      const defaultOutput = extendFileName(image, '-remove-background')
+      const output = selectedOutput ?? defaultOutput
 
-      const output =
-        flags.output || extendFileName(flags.image, '-remove-background')
+      const dirName = path.dirname(output)
+      if (!existsSync(dirName)) {
+        await fs.mkdir(dirName, { recursive: true })
+      }
 
       await fs.writeFile(output, result.data)
       this.log('\n\nFile written at : ', output)
