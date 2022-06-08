@@ -20,7 +20,7 @@ $ npm install -g @clipdrop/cli
 $ clipdrop COMMAND
 running command...
 $ clipdrop (--version)
-@clipdrop/cli/0.1.2 darwin-arm64 node-v16.15.0
+@clipdrop/cli/0.1.4 darwin-arm64 node-v16.15.0
 $ clipdrop --help [COMMAND]
 USAGE
   $ clipdrop COMMAND
@@ -53,12 +53,15 @@ Remove objects on a picture
 
 ```
 USAGE
-  $ clipdrop cleanup -i <value> -m <value> [-o <value>]
+  $ clipdrop cleanup -i <value> [--object <value>] [-m <value>] [-f <value> | -o <value>]
 
 FLAGS
-  -i, --image=<value>   (required) Image to process
-  -m, --mask=<value>    (required) Related mask
-  -o, --output=<value>  Result destination
+  -f, --folder=<value>     Result destination folder, can be useFull with multi process
+  -i, --image=<value>...   (required) Image to process can be glob pattern like "/path/to/image/*.jpg"
+  -m, --mask=<value>       Related mask
+  -o, --output=<value>...  Result destination
+  --object=<value>...      [required for batch] object to remove in all pictures, detected with cocoSsd model. Use "*"
+                           to remove all detected objects
 
 DESCRIPTION
   Remove objects on a picture
@@ -67,7 +70,7 @@ EXAMPLES
   $ clipdrop cleanup
 ```
 
-_See code: [dist/commands/cleanup.ts](https://github.com/initml/clipdrop-api-samples/blob/v0.1.2/dist/commands/cleanup.ts)_
+_See code: [dist/commands/cleanup.ts](https://github.com/initml/clipdrop-api-samples/blob/v0.1.4/dist/commands/cleanup.ts)_
 
 ## `clipdrop completion`
 
@@ -404,7 +407,7 @@ EXAMPLES
   $ clipdrop register-api-key <key>
 ```
 
-_See code: [dist/commands/register-api-key.ts](https://github.com/initml/clipdrop-api-samples/blob/v0.1.2/dist/commands/register-api-key.ts)_
+_See code: [dist/commands/register-api-key.ts](https://github.com/initml/clipdrop-api-samples/blob/v0.1.4/dist/commands/register-api-key.ts)_
 
 ## `clipdrop remove-background`
 
@@ -412,11 +415,12 @@ Remove the background of a picture
 
 ```
 USAGE
-  $ clipdrop remove-background -i <value> [-o <value>]
+  $ clipdrop remove-background -i <value> [-f <value> | -o <value>]
 
 FLAGS
-  -i, --image=<value>   (required) Image to process
-  -o, --output=<value>  Result destination
+  -f, --folder=<value>     Result destination folder, can be useFull with multi process
+  -i, --image=<value>...   (required) Image to process can be glob pattern like "/path/to/image/*.jpg"
+  -o, --output=<value>...  Result destination
 
 DESCRIPTION
   Remove the background of a picture
@@ -425,7 +429,7 @@ EXAMPLES
   $ clipdrop remove-background
 ```
 
-_See code: [dist/commands/remove-background.ts](https://github.com/initml/clipdrop-api-samples/blob/v0.1.2/dist/commands/remove-background.ts)_
+_See code: [dist/commands/remove-background.ts](https://github.com/initml/clipdrop-api-samples/blob/v0.1.4/dist/commands/remove-background.ts)_
 
 ## `clipdrop super-resolution`
 
@@ -433,12 +437,13 @@ Upscale the resolution of a picture
 
 ```
 USAGE
-  $ clipdrop super-resolution -i <value> [-s 2|4] [-o <value>]
+  $ clipdrop super-resolution -i <value> [-s 2|4] [-f <value> | -o <value>]
 
 FLAGS
-  -i, --image=<value>   (required) Image to process
-  -o, --output=<value>  Result destination
-  -s, --scale=(2|4)     [default: 2] Scale applied to your picture
+  -f, --folder=<value>     Result destination folder, can be useFull with multi process
+  -i, --image=<value>...   (required) Image to process can be glob pattern like "/path/to/image/*.jpg"
+  -o, --output=<value>...  Result destination
+  -s, --scale=(2|4)        [default: 2] Scale applied to your picture
 
 DESCRIPTION
   Upscale the resolution of a picture
@@ -447,5 +452,5 @@ EXAMPLES
   $ clipdrop super-resolution
 ```
 
-_See code: [dist/commands/super-resolution.ts](https://github.com/initml/clipdrop-api-samples/blob/v0.1.2/dist/commands/super-resolution.ts)_
+_See code: [dist/commands/super-resolution.ts](https://github.com/initml/clipdrop-api-samples/blob/v0.1.4/dist/commands/super-resolution.ts)_
 <!-- commandsstop -->
