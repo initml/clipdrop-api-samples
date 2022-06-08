@@ -1,26 +1,17 @@
 # Process files use ClipAPI
 
 import argparse
-import io
-import json
 import math
 import os
 import shutil
 import sys
 import time
-import zipfile
-from ast import Str
-from configparser import ExtendedInterpolation
 from os import listdir
 from os.path import isfile, join
 
-# import cv2
-import numpy as np
 import PIL
-import PIL.ImageOps
 import requests
 from PIL import Image
-
 
 parser = argparse.ArgumentParser(
     description='This tool can process images using the ClipAPI.')
@@ -163,10 +154,11 @@ for file in files:
             if args.background_color:
                 file_out = join(file_system['out'], f'{name}.png')
                 remove_background(file_in, 'temp.png')
-                composite('temp.png',file_out, args.background_color)
+                composite('temp.png', file_out, args.background_color)
             else:
-                file_out = join(file_system['out'], f'{name}.{args.output_format}')
-                remove_background(file_in, file_out)      
+                file_out = join(file_system['out'],
+                                f'{name}.{args.output_format}')
+                remove_background(file_in, file_out)
         end = time.time()
         print(f'{file} processed in {end - start} seconds')
 
