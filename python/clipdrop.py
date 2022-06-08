@@ -40,8 +40,8 @@ parser.add_argument('--output_format',
                     help='Select the new background')
 parser.add_argument('--background_color',
                     type=str,
-                    default=None
-                    help='Select the new background color, can be any color, or transparent or chekcboard')
+                    default=None,
+                    help='Select the new background color, can be any color, or chekcboard, do not set to set a transparent background')
 parser.add_argument('--width', type=int, default=None,
                     help='width of the output image')
 parser.add_argument('--height', type=int, default=None,
@@ -100,30 +100,19 @@ def checkerboard(h, w, channels=3, tiles=16, fg=.95, bg=.6):
     return Image.fromarray(np.uint8(np.dstack([scaled]*channels)*255))
 
 
-def composite(image_in, mask_in, f_out, color='white'):
-    if color == 'transparent':
-        img = Image.open(f_in).convert('RGBA')
-        mask = Image.open(mask_in)
-        mask = PIL.ImageOps.invert(mask)
-        mask = mask.resize(img.size, Image.BICUBIC)
-        transparent = Image.new('RGBA', img.size, color=(0, 0, 0, 0))
-        # print(f_in, mask_in, f_out, img.size, mask.size)
-        im = Image.composite(transparent, img, mask).convert('RGBA')
-        im.save(f_out, "PNG")
-    elif color == 'checkerboard':
+def composite(image_in, f_out, color='white'):
+    if color == 'checkerboard':
         img = Image.open(image_in)
         mask = Image.open(mask_in)
         mask = PIL.ImageOps.invert(mask)
         checker = checkerboard(h=img.size[1], w=img.size[0])
-        im = Image.composite(checker, img, mask)
-        im.save(f_out)
+        checker.paste(img, (0, 0), img)
+        checker.save(f_out)
     else:
         img = Image.open(image_in)
-        mask = Image.open(mask_in)
-        mask = PIL.ImageOps.invert(mask)
         background = Image.new('RGB', img.size, color=color)
-        im = Image.composite(background, img, mask)
-        im.save(f_out)
+        background.paste(img, (0, 0), img)
+        background.save(f_out)
 
 
 def resize(f_in, f_out, new_size):
@@ -168,13 +157,16 @@ for file in files:
     try:
         print(f'Start processing {file}')
         start = time.time()
-        file_in = join(file_system['in'], file)
-        name = os.path.splitext(file)[0]
-        ext = args.output_format
-        file_out = join(file_system['out'], f'{name}.{ext}')
         if args.api == 'remove-background':
-            remove_background(file_in, file_out)
-
+            file_in = join(file_system['in'], file)
+            name = os.path.splitext(file)[0]
+            if args.background_color:
+                file_out = join(file_system['out'], f'{name}.png')
+                remove_background(file_in, 'temp.png')
+                composite('temp.png',file_out, args.background_color)
+            else:
+                file_out = join(file_system['out'], f'{name}.{args.output_format}')
+                remove_background(file_in, file_out)      
         end = time.time()
         print(f'{file} processed in {end - start} seconds')
 
