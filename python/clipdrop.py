@@ -164,6 +164,8 @@ for file in files:
                 file_out = join(file_system['out'],
                                 f'{name}.{args.output_format}')
                 remove_background(file_in, file_out)
+            if args.join:
+                join_imgs([file_in, file_out], file_out)
         end = time.time()
         print(f'{file} processed in {end - start} seconds')
 
