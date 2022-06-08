@@ -10,6 +10,7 @@ from os import listdir
 from os.path import isfile, join
 
 import PIL
+from black import main
 import requests
 from PIL import Image
 
@@ -50,6 +51,8 @@ SUPER_RESOLUTION = 'https://apis.clipdrop.co/super-resolution/v1'
 REMOVE_BACKGROUND = 'https://apis.clipdrop.co/remove-background/v1'
 API_KEY = args.API_KEY
 
+# call the API to remove the background
+
 
 def remove_background(input_file, output_file):
     output_format = os.path.splitext(output_file)[1].lower()
@@ -68,13 +71,10 @@ def remove_background(input_file, output_file):
         with open(output_file, 'wb') as f:
             for chunk in r:
                 f.write(chunk)
-
-        # zip = zipfile.ZipFile(temp_file)
-        # os.makedirs(filename_out, exist_ok=True)
-        # zip.extractall(filename_out)
-        # os.remove(temp_file)
     else:
         r.raise_for_status()
+
+# create a checkerboard image
 
 
 def checkerboard(h, w, channels=3, tiles=16, fg=.95, bg=.6):
@@ -89,6 +89,8 @@ def checkerboard(h, w, channels=3, tiles=16, fg=.95, bg=.6):
     scaled = scaled[:h, :w]
     # print('scaled', scaled.shape)
     return Image.fromarray(np.uint8(np.dstack([scaled]*channels)*255))
+
+# compose an image with a new background and a checkerboard
 
 
 def composite(image_in, f_out, color='white'):
@@ -105,12 +107,16 @@ def composite(image_in, f_out, color='white'):
         background.paste(img, (0, 0), img)
         background.save(f_out)
 
+# resize an image
+
 
 def resize(f_in, f_out, new_size):
     img = Image.open(f_in)
     img.thumbnail(new_size, Image.ANTIALIAS)
     img = img.convert("RGB")
     img.save(f_out)
+
+# join images to compare them
 
 
 def join_imgs(imgs, filename_out):
@@ -129,7 +135,7 @@ def join_imgs(imgs, filename_out):
     new_im.save(filename_out)
 
 
-# Define all needed folders
+# process all the images in the input folder
 file_system = {
     'in': args.input,
     'out': args.output,
@@ -141,7 +147,7 @@ for key, folder in file_system.items():
         print('Creating ', folder)
         os.makedirs(folder)
 
-################################ Process files ###########################################
+# List files an iterate
 files = [f for f in listdir(file_system['in'])
          if isfile(join(file_system['in'], f))]
 for file in files:
