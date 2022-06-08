@@ -9,7 +9,6 @@ import time
 from os import listdir
 from os.path import isfile, join
 
-import numpy as np
 import PIL
 import requests
 from black import main
@@ -35,12 +34,6 @@ parser.add_argument('--background_color',
                     type=str,
                     default=None,
                     help='Select the new background color, can be any color, or chekcboard, do not set to set a transparent background')
-parser.add_argument('--width', type=int, default=None,
-                    help='width of the output image')
-parser.add_argument('--height', type=int, default=None,
-                    help='height of the output image')
-parser.add_argument('--center', action='store_true', default=False,
-                    help='center the image by removing transparent pixels')
 parser.add_argument('--join', action='store_true', default=False,
                     help='center the image')
 
