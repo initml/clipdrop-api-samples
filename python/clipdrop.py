@@ -19,7 +19,7 @@ parser = argparse.ArgumentParser(
     description='This tool can process images using the ClipAPI.')
 parser.add_argument('--API_KEY', required=True, type=str,
                     help='The API key to use for the API call.')
-parser.add_argument('--api', required=True, choices=('remove-background', 'image-upscaler'),
+parser.add_argument('--api', required=True, choices=('remove-background', 'super-resolution'),
                     help='The alogrythm to be applyed on all your images')
 parser.add_argument('-i', '--input', required=True,
                     help='the folder containing the images to process')
@@ -75,20 +75,37 @@ def remove_background(input_file, output_file):
         r.raise_for_status()
 
 
+def super_resolution(input_file, output_file, scale=2):
+    """call the API to upscale the image"""
+    output_format = os.path.splitext(output_file)[1].lower()
+    img_in = open(input_file, 'rb')
+    files = {'image_file': ('image.jpeg', img_in, 'image/jpeg')}
+    image_type = {'.png': 'image/png', '.jpeg': 'image/jpeg',
+                  '.jpg': 'image/jpeg', '.webp': 'image/webp'}[output_format.lower()]
+    headers = {'x-api-key': API_KEY,
+               'accept': image_type}
+    data = {'upscale': scale}
+    r = requests.post(SUPER_RESOLUTION,
+                      stream=True,
+                      files=files,
+                      headers=headers,
+                      data=data)
+
+    if r.ok:
+        with open(output_file, 'wb') as f:
+            for chunk in r:
+                f.write(chunk)
+    else:
+        r.raise_for_status()
+
+
 def checkerboard(h, w, channels=3, tiles=16, fg=.95, bg=.6):
     """Create a shape (w,h,1) array tiled with a checkerboard pattern."""
-    # print('input',h,w)
     square_size = [math.ceil(float(d / tiles) / 2) for d in [h, w]]
-    # print ('square size',square_size)
     board = [[fg, bg] * tiles, [bg, fg] * tiles] * tiles
-    # print ('board',board)
     scaled = np.kron(board, np.ones(square_size))
-    # print('scaled', scaled.shape)
     scaled = scaled[:h, :w]
-    # print('scaled', scaled.shape)
     return Image.fromarray(np.uint8(np.dstack([scaled]*channels)*255))
-
-#
 
 
 def composite(image_in, f_out, color='white'):
@@ -134,6 +151,8 @@ def join_imgs(imgs, filename_out):
 file_system = {
     'in': args.input,
     'out': args.output,
+
+
 }
 
 # Generate folders if needed
@@ -160,6 +179,13 @@ for file in files:
                 file_out = join(file_system['out'],
                                 f'{name}.{args.output_format}')
                 remove_background(file_in, file_out)
+            if args.join:
+                join_imgs([file_in, file_out], file_out)
+        elif args.api == 'super-resolution':
+            file_in = join(file_system['in'], file)
+            name = os.path.splitext(file)[0]
+            file_out = join(file_system['out'], f'{name}.{args.output_format}')
+            super_resolution(file_in, file_out, args.upscale)
             if args.join:
                 join_imgs([file_in, file_out], file_out)
         end = time.time()
