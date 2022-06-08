@@ -1,4 +1,4 @@
-# Process files use ClipAPI
+# Process files using ClipDrop API
 
 import argparse
 import math
