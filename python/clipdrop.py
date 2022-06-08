@@ -9,9 +9,10 @@ import time
 from os import listdir
 from os.path import isfile, join
 
+import numpy as np
 import PIL
-from black import main
 import requests
+from black import main
 from PIL import Image
 
 parser = argparse.ArgumentParser(
@@ -96,8 +97,6 @@ def checkerboard(h, w, channels=3, tiles=16, fg=.95, bg=.6):
 def composite(image_in, f_out, color='white'):
     if color == 'checkerboard':
         img = Image.open(image_in)
-        mask = Image.open(mask_in)
-        mask = PIL.ImageOps.invert(mask)
         checker = checkerboard(h=img.size[1], w=img.size[0])
         checker.paste(img, (0, 0), img)
         checker.save(f_out)
