@@ -53,7 +53,7 @@ REMOVE_BACKGROUND = 'https://apis.clipdrop.co/remove-background/v1'
 API_KEY = args.API_KEY
 
 
-def remove_background(input_file, output_file):
+def call_remove_background_api(input_file, output_file):
     """call the API to remove the background"""
     output_format = os.path.splitext(output_file)[1].lower()
     img_in = open(input_file, 'rb')
@@ -75,7 +75,7 @@ def remove_background(input_file, output_file):
         r.raise_for_status()
 
 
-def super_resolution(input_file, output_file, scale=2):
+def call_super_resolution_api(input_file, output_file, scale=2):
     """call the API to upscale the image"""
     output_format = os.path.splitext(output_file)[1].lower()
     img_in = open(input_file, 'rb')
@@ -151,8 +151,6 @@ def join_imgs(imgs, filename_out):
 file_system = {
     'in': args.input,
     'out': args.output,
-
-
 }
 
 # Generate folders if needed
@@ -173,19 +171,19 @@ for file in files:
             name = os.path.splitext(file)[0]
             if args.background_color:
                 file_out = join(file_system['out'], f'{name}.png')
-                remove_background(file_in, 'temp.png')
+                call_remove_background_api(file_in, 'temp.png')
                 composite('temp.png', file_out, args.background_color)
             else:
                 file_out = join(file_system['out'],
                                 f'{name}.{args.output_format}')
-                remove_background(file_in, file_out)
+                call_remove_background_api(file_in, file_out)
             if args.join:
                 join_imgs([file_in, file_out], file_out)
         elif args.api == 'super-resolution':
             file_in = join(file_system['in'], file)
             name = os.path.splitext(file)[0]
             file_out = join(file_system['out'], f'{name}.{args.output_format}')
-            super_resolution(file_in, file_out, args.upscale)
+            call_super_resolution_api(file_in, file_out, args.upscale)
             if args.join:
                 join_imgs([file_in, file_out], file_out)
         end = time.time()
