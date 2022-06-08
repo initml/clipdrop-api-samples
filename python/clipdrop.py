@@ -3,12 +3,12 @@
 import argparse
 import math
 import os
-import shutil
 import sys
 import time
 from os import listdir
 from os.path import isfile, join
 
+import numpy as np
 import PIL
 import requests
 from black import main
@@ -166,6 +166,7 @@ for file in files:
                 file_out = join(file_system['out'], f'{name}.png')
                 call_remove_background_api(file_in, 'temp.png')
                 composite('temp.png', file_out, args.background_color)
+                os.remove('temp.png')
             else:
                 file_out = join(file_system['out'],
                                 f'{name}.{args.output_format}')
