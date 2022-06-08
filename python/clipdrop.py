@@ -52,10 +52,9 @@ SUPER_RESOLUTION = 'https://apis.clipdrop.co/super-resolution/v1'
 REMOVE_BACKGROUND = 'https://apis.clipdrop.co/remove-background/v1'
 API_KEY = args.API_KEY
 
-# call the API to remove the background
-
 
 def remove_background(input_file, output_file):
+    """call the API to remove the background"""
     output_format = os.path.splitext(output_file)[1].lower()
     img_in = open(input_file, 'rb')
     files = {'image_file': ('image.jpeg', img_in, 'image/jpeg')}
@@ -75,8 +74,6 @@ def remove_background(input_file, output_file):
     else:
         r.raise_for_status()
 
-# create a checkerboard image
-
 
 def checkerboard(h, w, channels=3, tiles=16, fg=.95, bg=.6):
     """Create a shape (w,h,1) array tiled with a checkerboard pattern."""
@@ -91,10 +88,11 @@ def checkerboard(h, w, channels=3, tiles=16, fg=.95, bg=.6):
     # print('scaled', scaled.shape)
     return Image.fromarray(np.uint8(np.dstack([scaled]*channels)*255))
 
-# compose an image with a new background and a checkerboard
+#
 
 
 def composite(image_in, f_out, color='white'):
+    """compose an image with a new background and a checkerboard"""
     if color == 'checkerboard':
         img = Image.open(image_in)
         checker = checkerboard(h=img.size[1], w=img.size[0])
@@ -106,19 +104,17 @@ def composite(image_in, f_out, color='white'):
         background.paste(img, (0, 0), img)
         background.save(f_out)
 
-# resize an image
-
 
 def resize(f_in, f_out, new_size):
+    """resize an image"""
     img = Image.open(f_in)
     img.thumbnail(new_size, Image.ANTIALIAS)
     img = img.convert("RGB")
     img.save(f_out)
 
-# join images to compare them
-
 
 def join_imgs(imgs, filename_out):
+    """join images to compare them"""
     images = [Image.open(x) for x in imgs]
     widths, heights = zip(*(i.size for i in images))
 
