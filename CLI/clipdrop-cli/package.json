@@ -1,6 +1,6 @@
 {
   "name": "@clipdrop/cli",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "description": "Use our advanced ML models to improve your image directly from a CLI",
   "author": "Igor ESCHALIER",
   "bin": {
@@ -20,7 +20,13 @@
     "@oclif/core": "^1.9.0",
     "@oclif/plugin-help": "^5.1.12",
     "@oclif/plugin-plugins": "^2.1.0",
+    "@tensorflow-models/coco-ssd": "^2.2.2",
+    "@tensorflow/tfjs": "^3.18.0",
+    "@tensorflow/tfjs-backend-cpu": "^3.18.0",
+    "@tensorflow/tfjs-backend-webgl": "^3.18.0",
+    "@tensorflow/tfjs-node": "^3.18.0",
     "axios": "^0.27.2",
+    "canvas": "^2.9.1",
     "conf": "^10.1.2",
     "form-data": "^4.0.0",
     "glob": "^8.0.3",
