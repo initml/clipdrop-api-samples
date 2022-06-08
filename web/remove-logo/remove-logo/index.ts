@@ -1,14 +1,43 @@
+import * as automl from '@tensorflow/tfjs-automl'
+import * as tf from '@tensorflow/tfjs'
+import { dispose, image } from '@tensorflow/tfjs-core'
+
 type Cleanup = {
   base64: string
+}
+
+const MODEL_URL = '/logo-detection/model.json'
+automl.loadImageClassification(MODEL_URL).then((model) => {
+  // @ts-ignore
+  window.logoDetector = model
+  console.log('model loaded')
+})
+
+/** Contains the coordinates of a bounding box. */
+export interface Box {
+  /** Number of pixels from the top of the image (top padding). */
+  top: number
+  /** Number of pixels from the left of the image (left padding). */
+  left: number
+  /** The width of the box. */
+  width: number
+  /** The height of the box. */
+  height: number
+}
+
+/** The predicted object, which holds the score, label and bounding box. */
+export interface PredictedObject {
+  box: Box
+  score: number
+  label: string
 }
 
 const IS_PROD = !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
 const MOCK_API_CALL = IS_PROD && false
 
-const VISION_API_ENDPOINT = `https://vision.googleapis.com/v1/images:annotate?key=${process.env.NEXT_PUBLIC_VISION_API_KEY}`
 const CLEANUP_API_ENDPOINT = 'https://apis.clipdrop.co/cleanup/v1'
 
-const getBase64 = async function (file: File) {
+const getImage = async function (file: File): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     var reader = new FileReader()
     reader.readAsDataURL(file)
@@ -18,11 +47,13 @@ const getBase64 = async function (file: File) {
         reject('could not split')
         return
       }
-      const [, base64] = result.split(';base64,')
-      resolve(base64)
+      const image = new Image()
+      image.onload = function (e: any) {
+        resolve(image)
+      }
+      image.src = result
     }
     reader.onerror = function (error) {
-      console.error('Error: ', error)
       reject(error)
     }
   })
@@ -50,6 +81,66 @@ const getImageSize = async function (file: File): Promise<[number, number]> {
   })
 }
 
+function calculateMostLikelyLabels(
+  scores: Float32Array,
+  numBoxes: number,
+  numClasses: number
+): { boxScores: number[]; boxLabels: number[] } {
+  // Holds a score for each box.
+  const boxScores: number[] = []
+  // Holds the label id for each box.
+  const boxLabels: number[] = []
+  for (let i = 0; i < numBoxes; i++) {
+    let maxScore = Number.MIN_VALUE
+    let mostLikelyLabel = -1
+    for (let j = 0; j < numClasses; j++) {
+      const flatIndex = i * numClasses + j
+      const score = scores[flatIndex]
+      if (score > maxScore) {
+        maxScore = scores[flatIndex]
+        mostLikelyLabel = j
+      }
+    }
+    boxScores[i] = maxScore
+    boxLabels[i] = mostLikelyLabel
+  }
+  return { boxScores, boxLabels }
+}
+
+function buildDetectedObjects(
+  width: number,
+  height: number,
+  boxes: Float32Array,
+  boxScores: number[],
+  boxLabels: number[],
+  selectedBoxes: Int32Array,
+  dictionary: string[]
+): PredictedObject[] {
+  const objects: PredictedObject[] = []
+  // Each 2d rectangle is fully described with 4 coordinates.
+  const numBoxCoords = 4
+  for (let i = 0; i < selectedBoxes.length; i++) {
+    const boxIndex = selectedBoxes[i]
+    const [top, left, bottom, right] = Array.from(
+      boxes.slice(
+        boxIndex * numBoxCoords,
+        boxIndex * numBoxCoords + numBoxCoords
+      )
+    )
+    objects.push({
+      box: {
+        left: left * width,
+        top: top * height,
+        width: (right - left) * width,
+        height: (bottom - top) * height,
+      },
+      label: dictionary[boxLabels[boxIndex]],
+      score: boxScores[boxIndex],
+    })
+  }
+  return objects
+}
+
 export async function removeLogo(file: File, apiKey: string): Promise<Cleanup> {
   return new Promise(async (resolve, reject) => {
     try {
@@ -57,42 +148,69 @@ export async function removeLogo(file: File, apiKey: string): Promise<Cleanup> {
         return file
       }
 
-      // text detection
-      const base64File = await getBase64(file)
-      // Text detection in the item
-      const detection = await fetch(VISION_API_ENDPOINT, {
-        method: 'POST',
-        body: JSON.stringify({
-          requests: [
-            {
-              image: {
-                content: base64File,
-              },
-              features: [
-                {
-                  type: 'TEXT_DETECTION',
-                },
-              ],
-            },
-          ],
-        }),
-      })
-      if (!detection.ok) {
-        throw new Error('could not call text detection API')
-      }
-      const jsonResponse = await detection.json()
+      // // object detection
+      // // Load the model.
+      // // @ts-ignore
 
-      const response = jsonResponse.responses[0]
-      const page = response?.fullTextAnnotation?.pages[0]
-      if (!page) {
-        throw new Error('no text found')
-      }
-      const boxes = page.blocks
-        .map((b: any) => b.paragraphs.map((p: any) => p.boundingBox.vertices))
-        .flat()
+      const img = await getImage(file)
+      const [width, height] = [img.naturalWidth, img.naturalHeight]
+
+      const OUTPUT_NODE_NAMES = [
+        'Postprocessor/convert_scores',
+        'Postprocessor/Decode/transpose_1',
+      ]
+
+      const tfImg = tf.expandDims(tf.browser.fromPixels(img).toFloat())
+      const [scoresTensor, boxesTensor] =
+        // @ts-ignore
+        (await window.logoDetector.graphModel.executeAsync(
+          tfImg,
+          OUTPUT_NODE_NAMES
+        )) as tf.Tensor[]
+
+      const [, numBoxes, numClasses] = scoresTensor.shape
+
+      const [scores, boxes] = await Promise.all([
+        scoresTensor.data(),
+        boxesTensor.data(),
+      ])
+
+      const { boxScores, boxLabels } = calculateMostLikelyLabels(
+        scores as Float32Array,
+        numBoxes,
+        numClasses
+      )
+
+      // Sort the boxes by score, ignoring overlapping boxes.
+      const selectedBoxesTensor = await image.nonMaxSuppressionAsync(
+        boxesTensor as tf.Tensor2D,
+        boxScores,
+        20,
+        0.5,
+        0.1
+      )
+
+      const selectedBoxes = (await selectedBoxesTensor.data()) as Int32Array
+      dispose([tfImg, scoresTensor, boxesTensor, selectedBoxesTensor])
+
+      const predictions = buildDetectedObjects(
+        width,
+        height,
+        boxes as Float32Array,
+        boxScores,
+        boxLabels,
+        selectedBoxes,
+        ['background', 'logo']
+      )
+
+      let bboxes = predictions.map((p: any) => p.box)
+      console.log(bboxes)
+
+      // only keep the first one
+      bboxes = bboxes.slice(0, 1)
+
       const canvas = document.createElement('canvas')
       const ctx = canvas.getContext('2d')
-      const [width, height] = await getImageSize(file)
 
       canvas.width = width
       canvas.height = height
@@ -100,15 +218,17 @@ export async function removeLogo(file: File, apiKey: string): Promise<Cleanup> {
         ctx.fillStyle = 'black'
         ctx.fillRect(0, 0, width, height)
         ctx.fillStyle = 'white'
-        for (let box of boxes) {
-          const x = box[0].x
-          const y = box[0].y
-          const width = box[2].x - x
-          const height = box[2].y - y
-          const newWidth = width * 1.5
-          const newHeight = height * 1.5
+        for (let box of bboxes) {
+          console.log(box)
+          const x = box.left
+          const y = box.top
+          const width = box.width
+          const height = box.height
+          const newWidth = width * 1.15
+          const newHeight = height * 1.15
           const newX = x - Math.round((newWidth - width) / 2)
           const newY = y - Math.round((newHeight - height) / 2)
+          console.log(x, y, width, height)
 
           const expanded = {
             x: newX,
@@ -118,6 +238,7 @@ export async function removeLogo(file: File, apiKey: string): Promise<Cleanup> {
           }
           ctx.fillRect(expanded.x, expanded.y, expanded.width, expanded.height)
         }
+        img?.parentNode?.appendChild(canvas)
 
         // Send to cleanup API
         canvas.toBlob(async (b: Blob | null) => {
@@ -166,6 +287,7 @@ export async function removeLogo(file: File, apiKey: string): Promise<Cleanup> {
           }
         })
       }
+      img.src = URL.createObjectURL(file)
     } catch (e) {
       console.error('error in remove text', e)
       reject(e)

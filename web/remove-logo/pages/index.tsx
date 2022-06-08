@@ -32,11 +32,20 @@ const Home: NextPage = () => {
               rel="noopener noreferrer"
             >
               ClipDrop API
+            </a>{' '}
+            <span className="text-gray-600">×</span>{' '}
+            <a
+              href="https://clipdrop.co/apis?utm_s ource=api-sample&amp;utm_medium=decompose-layers"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src="/TF_js.png"
+                alt="tfjs logo"
+                className="mr-2 inline h-10"
+              />
             </a>
           </h1>
-          <p className="hidden text-lg font-semibold text-gray-400 sm:block">
-            Logo Removal Sample
-          </p>
         </div>
         <div className="flex items-center space-x-12">
           <APIKeyInput
