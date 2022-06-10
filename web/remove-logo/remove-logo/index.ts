@@ -7,11 +7,13 @@ type Cleanup = {
 }
 
 const MODEL_URL = '/logo-detection/model.json'
-automl.loadImageClassification(MODEL_URL).then((model) => {
-  // @ts-ignore
-  window.logoDetector = model
-  console.log('model loaded')
-})
+if (typeof window !== 'undefined') {
+  automl.loadImageClassification(MODEL_URL).then((model) => {
+    // @ts-ignore
+    window.logoDetector = model
+    console.log('model loaded')
+  })
+}
 
 /** Contains the coordinates of a bounding box. */
 export interface Box {
