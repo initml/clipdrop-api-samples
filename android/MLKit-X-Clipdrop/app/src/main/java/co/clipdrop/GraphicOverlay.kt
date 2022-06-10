@@ -1,4 +1,3 @@
-
 package co.clipdrop
 
 import android.animation.ValueAnimator
@@ -273,6 +272,7 @@ class GraphicOverlay(
     fun setOnGraphicChanged(onGraphicsChanged: OnGraphicsChanged) {
         this.onGraphicsChanged = onGraphicsChanged
     }
+
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         waveAnimator = ValueAnimator.ofFloat(220f, 80f).apply {
@@ -295,51 +295,58 @@ class GraphicOverlay(
     var exportMask: Bitmap? = null
         get() {
 
-        val clipImage = bitmap!!
-        val rectPaint: Paint = Paint()
+            val clipImage = bitmap!!
+            val rectPaint: Paint = Paint()
 
-        val bitmapOut = Bitmap.createBitmap(clipImage.width, clipImage.height, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmapOut)
+            val bitmapOut =
+                Bitmap.createBitmap(clipImage.width, clipImage.height, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(bitmapOut)
 
-        canvas.drawRect( 0f, 0f, clipImage.width.toFloat(), clipImage.height.toFloat(), rectPaint)
+            canvas.drawRect(
+                0f,
+                0f,
+                clipImage.width.toFloat(),
+                clipImage.height.toFloat(),
+                rectPaint
+            )
 
-        for (graphic in graphics) {
-            graphic.draw(canvas, waveRadiusOffset, selectedText, true)
+            for (graphic in graphics) {
+                graphic.draw(canvas, waveRadiusOffset, selectedText, true)
+            }
+
+            return bitmapOut
         }
-
-        return bitmapOut
-    }
 
     var exportRec: Bitmap? = null
         get() {
-        var rect : Rect? = null
+            var rect: Rect? = null
 
-        for (graphic in graphics) {
-            (graphic as TextGraphic).text.textBlocks.forEach {
-                it.lines.forEach {  line ->
-                    if (line.text == selectedText) {
-                        rect = line.boundingBox
+            for (graphic in graphics) {
+                (graphic as TextGraphic).text.textBlocks.forEach {
+                    it.lines.forEach { line ->
+                        if (line.text == selectedText) {
+                            rect = line.boundingBox
+                        }
                     }
                 }
             }
-        }
 
-       return if (rect != null) {
-            val subImage = Bitmap.createBitmap(
-                rect!!.width(),
-                rect!!.height(), Bitmap.Config.ARGB_8888
-            )
-            val c = Canvas(subImage)
-            c.drawBitmap(
-                bitmap!!, rect!!,
-                Rect(0, 0, rect!!.width(), rect!!.height()), null
-            )
-            subImage
-        } else {
-            bitmap!!
-        }
+            return if (rect != null) {
+                val subImage = Bitmap.createBitmap(
+                    rect!!.width(),
+                    rect!!.height(), Bitmap.Config.ARGB_8888
+                )
+                val c = Canvas(subImage)
+                c.drawBitmap(
+                    bitmap!!, rect!!,
+                    Rect(0, 0, rect!!.width(), rect!!.height()), null
+                )
+                subImage
+            } else {
+                bitmap!!
+            }
 
-    }
+        }
 
     fun getSubimage(b: Bitmap, copyRect: Rect): Bitmap? {
         // Extracts a part of a Bitmap defined by copyRect.
@@ -376,7 +383,7 @@ class GraphicOverlay(
             if (isTextSelected) {
                 for (graphic in graphics) {
                     (graphic as TextGraphic).text.textBlocks.forEach {
-                        it.lines.forEach {  line ->
+                        it.lines.forEach { line ->
                             if (line.text == selectedText) {
                                 val testTextSize = 48f;
                                 val textPaint = Paint()
@@ -419,10 +426,12 @@ class GraphicOverlay(
         postInvalidate()
     }
 
-    fun updateLogo(bitmap: Bitmap, rootWidth : Int) {
-        this.logo = Bitmap.createScaledBitmap(bitmap,
+    fun updateLogo(bitmap: Bitmap, rootWidth: Int) {
+        this.logo = Bitmap.createScaledBitmap(
+            bitmap,
             (rootWidth),
-            (rootWidth),  false)
+            (rootWidth), false
+        )
         postInvalidate()
     }
 
@@ -434,7 +443,7 @@ class GraphicOverlay(
     private var mode = NONE
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-        if(!isTextSelected) {
+        if (!isTextSelected) {
             return true
         }
 

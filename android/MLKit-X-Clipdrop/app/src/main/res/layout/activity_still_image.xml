@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:keepScreenOn="true">
 
-
     <ImageView
         android:id="@+id/preview"
         android:layout_width="wrap_content"
@@ -17,8 +16,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-
 
     <co.clipdrop.GraphicOverlay
         android:id="@+id/graphic_overlay"
@@ -71,25 +68,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:selectionRequired="true"
-                app:singleSelection="true"/>
+                app:singleSelection="true" />
         </ScrollView>
-        <!--    </HorizontalScrollView>-->
-
-
     </LinearLayout>
-
 
     <LinearLayout
         android:id="@+id/textSelection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:layout_marginEnd="30dp"
         android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
         android:layout_marginBottom="30dp"
-        android:orientation="horizontal"
-        android:weightSum="10"
         android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:weightSum="10"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <com.google.android.material.textfield.TextInputLayout
@@ -112,9 +105,9 @@
 
         <Button
             android:id="@+id/change_color"
-            android:layout_marginLeft="10dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:layout_weight="4"
             android:text="Change Color" />
     </LinearLayout>

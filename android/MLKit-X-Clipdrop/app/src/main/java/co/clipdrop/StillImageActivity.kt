@@ -1,5 +1,3 @@
-
-
 package co.clipdrop
 
 import android.app.Activity
@@ -100,14 +98,17 @@ class StillImageActivity : AppCompatActivity() {
                     false
                 }
                 val inflater = popup.menuInflater
-                inflater.inflate(com.clipdrop.mlvisonxclipdrop.R.menu.camera_button_menu, popup.menu)
+                inflater.inflate(
+                    com.clipdrop.mlvisonxclipdrop.R.menu.camera_button_menu,
+                    popup.menu
+                )
                 popup.show()
             }
         graphicOverlay = findViewById(com.clipdrop.mlvisonxclipdrop.R.id.graphic_overlay)
 
         val d = ResourcesCompat.getDrawable(resources, R.mipmap.ic_launcher_foreground, null)!!
-        val bitmap : Bitmap = if (d is BitmapDrawable) {
-             (d as? BitmapDrawable)?.bitmap!!
+        val bitmap: Bitmap = if (d is BitmapDrawable) {
+            (d as? BitmapDrawable)?.bitmap!!
         } else {
             val bitmap = Bitmap.createBitmap(
                 d.intrinsicWidth,
@@ -157,18 +158,22 @@ class StillImageActivity : AppCompatActivity() {
 
             lifecycleScope.launch {
                 val bitmap1 = async {
-                    val bitmapScaled = Bitmap.createScaledBitmap(graphicOverlay?.bitmap!!,
-                    graphicOverlay?.bitmap!!.width / 2,
-                    graphicOverlay?.bitmap!!.height / 2, false)
+                    val bitmapScaled = Bitmap.createScaledBitmap(
+                        graphicOverlay?.bitmap!!,
+                        graphicOverlay?.bitmap!!.width / 2,
+                        graphicOverlay?.bitmap!!.height / 2, false
+                    )
                     val stream = ByteArrayOutputStream()
                     bitmapScaled?.compress(Bitmap.CompressFormat.JPEG, 100, stream)
                     stream.toByteArray()
                 }
 
                 val bitmap2 = async {
-                    val bitmapScaled = Bitmap.createScaledBitmap(graphicOverlay?.exportMask!!,
-                    graphicOverlay?.exportMask!!.width / 2,
-                    graphicOverlay?.exportMask!!.height / 2, false)
+                    val bitmapScaled = Bitmap.createScaledBitmap(
+                        graphicOverlay?.exportMask!!,
+                        graphicOverlay?.exportMask!!.width / 2,
+                        graphicOverlay?.exportMask!!.height / 2, false
+                    )
                     val maskStream = ByteArrayOutputStream()
                     bitmapScaled?.compress(Bitmap.CompressFormat.JPEG, 100, maskStream)
                     maskStream.toByteArray()
@@ -181,9 +186,13 @@ class StillImageActivity : AppCompatActivity() {
                         object : BitmapListener {
                             override fun onBitmapReceived(bitmap: Bitmap) {
                                 findViewById<View>(R.id.textSelection).visibility = View.VISIBLE
-                                graphicOverlay?.updateBitmap(  Bitmap.createScaledBitmap(bitmap,
-                                    bitmap.width * 2,
-                                    bitmap.height * 2, false))
+                                graphicOverlay?.updateBitmap(
+                                    Bitmap.createScaledBitmap(
+                                        bitmap,
+                                        bitmap.width * 2,
+                                        bitmap.height * 2, false
+                                    )
+                                )
                                 findViewById<View>(R.id.progress_circular).visibility = View.GONE
                                 findViewById<View>(R.id.text_input).visibility = View.VISIBLE
                             }
@@ -239,7 +248,11 @@ class StillImageActivity : AppCompatActivity() {
             })
     }
 
-    private fun clipApiProcess(streamArray : ByteArray,maskArray : ByteArray, bitmapListener: BitmapListener) =
+    private fun clipApiProcess(
+        streamArray: ByteArray,
+        maskArray: ByteArray,
+        bitmapListener: BitmapListener
+    ) =
         CoroutineScope(Dispatchers.Default).launch {
 
             val client = OkHttpClient.Builder()
