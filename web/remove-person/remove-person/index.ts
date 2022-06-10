@@ -40,6 +40,7 @@ const segmentationProperties = {
   scoreThreshold: 0.2,
 }
 
+// @ts-ignore
 var model = undefined
 
 // @ts-ignore
@@ -247,8 +248,6 @@ export async function removePerson(
       }
 
       ctx.putImageData(imageData, 0, 0)
-      document.body.appendChild(canvas)
-      return
 
       const canvas2 = document.createElement('canvas')
       canvas2.width = canvas.width
