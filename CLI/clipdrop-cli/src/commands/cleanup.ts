@@ -63,11 +63,13 @@ export default class Cleanup extends Command {
       throw new TypeError('No API key configured')
     }
 
-    if (!flags.mask && flags.object.length === 0) {
+    const objects = flags?.object?.length ?? 0
+
+    if (!flags.mask && objects === 0) {
       throw new TypeError('Specify one of --mask or --object flag')
     }
 
-    if (flags.image.length > 1 && flags.object.length === 0) {
+    if (flags.image.length > 1 && objects === 0) {
       throw new TypeError('Specify --object flag when using multiple images')
     }
 
