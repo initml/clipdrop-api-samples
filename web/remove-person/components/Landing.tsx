@@ -36,10 +36,10 @@ export default function Landing({ file, setFile, apiKey }: LandingProps) {
       <h1 className="flex flex-col items-center space-y-8 text-6xl font-bold">
         <span>
           <span className="bg-gradient-to-tr from-cyan-500 to-blue-600 bg-clip-text text-transparent">
-            Remove person / people
+            Remove people
           </span>
           <br />
-          from any image
+          from your images
         </span>
       </h1>
 

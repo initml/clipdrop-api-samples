@@ -40,12 +40,26 @@ const segmentationProperties = {
   scoreThreshold: 0.2,
 }
 
-var modelHasLoaded = false
 var model = undefined
 
 // @ts-ignore
-function processSegmentation(canvas, segmentation) {
+function processSegmentations(segmentations) {
+  for (let segmentation of segmentations) {
+    processSegmentation(segmentation)
+  }
+}
+
+// @ts-ignore
+function processSegmentation(segmentation) {
+  // Lets create a canvas to render our findings.
+  var canvas = document.createElement('canvas')
+  canvas.width = segmentation.width
+  canvas.height = segmentation.height
+
   var ctx = canvas.getContext('2d')
+  if (!ctx) {
+    return
+  }
   ctx.filter = 'blur(50px)'
 
   let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
@@ -54,7 +68,7 @@ function processSegmentation(canvas, segmentation) {
   // first round to store x,y of values that would be white in the mask
   let n = 0
   for (let i = 0; i < data.length; i += 4) {
-    if (segmentation.data[n] !== -1) {
+    if (segmentation.data[n] !== 0) {
       data[i] = 255
       data[i + 1] = 255
       data[i + 2] = 255
@@ -69,43 +83,23 @@ function processSegmentation(canvas, segmentation) {
   }
 
   ctx.putImageData(imageData, 0, 0)
+  console.log(typeof document)
+  if (typeof document !== 'undefined') {
+    // Client-side-only code
+    console.log('append canvas')
+    const doc = document as Document
+    const container = doc.getElementById('result-container')
+    if (container) {
+      canvas.setAttribute(
+        'class',
+        'pointer-events-none  absolute top-0 left-0 max-h-[calc(100vh-450px)] rounded-md transition-all duration-700 border border-opacity-20'
+      )
+      canvas.setAttribute('style', 'opacity:0.25')
 
-  const canvas2 = document.createElement('canvas')
-  canvas2.width = canvas.width
-  canvas2.height = canvas.height
-  const ctx2 = canvas.getContext('2d')
-
-  const max = Math.max(...[canvas.width, canvas.height])
-  console.log({ max })
-  console.log(max * 0.033)
-  const blurFactor = Math.round(max * 0.033)
-  const filter = `blur(${blurFactor}px)`
-  console.log(filter)
-  ctx2.filter = filter
-  ctx2.drawImage(canvas, 0, 0)
-
-  ctx.drawImage(canvas2, 0, 0)
-
-  imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
-  data = imageData.data
-
-  n = 0
-  for (let i = 0; i < data.length; i += 4) {
-    if (data[i] > 0) {
-      data[i] = 255
-      data[i + 1] = 255
-      data[i + 2] = 255
-      data[i + 3] = 255
-    } else {
-      data[i] = 0
-      data[i + 1] = 0
-      data[i + 2] = 0
-      data[i + 3] = 255
+      container.appendChild(canvas)
+      console.log('added')
     }
-    n++
   }
-  document.body.appendChild(canvas)
-  ctx.putImageData(imageData, 0, 0)
 }
 
 const interval = setInterval(() => {
@@ -121,7 +115,6 @@ const interval = setInterval(() => {
     // @ts-ignore
     model = window.bodyPix.load(bodyPixProperties).then(function (loadedModel) {
       model = loadedModel
-      modelHasLoaded = true
       // Show demo section now model is ready to use.
       console.log('loaded')
     })
@@ -239,87 +232,127 @@ function buildDetectedObjects(
 
 export async function removePerson(
   file: File,
+  imageData: ImageData,
   apiKey: string
 ): Promise<Cleanup> {
   return new Promise(async (resolve, reject) => {
     try {
-      if (MOCK_API_CALL) {
-        return file
+      var canvas = document.createElement('canvas')
+      const [width, height] = await getImageSize(file)
+      canvas.width = width
+      canvas.height = height
+      const ctx = canvas.getContext('2d')
+      if (!ctx) {
+        return
       }
 
-      // // object detection
-      // // Load the model.
-      // // @ts-ignore
+      ctx.putImageData(imageData, 0, 0)
+      document.body.appendChild(canvas)
+      return
 
+      const canvas2 = document.createElement('canvas')
+      canvas2.width = canvas.width
+      canvas2.height = canvas.height
+      const ctx2 = canvas.getContext('2d')
+      if (!ctx2) {
+        return
+      }
+      const max = Math.max(...[canvas.width, canvas.height])
+      console.log({ max })
+      console.log(max * 0.033)
+      const blurFactor = Math.round(max * 0.015)
+      const filter = `blur(${blurFactor}px)`
+      console.log(filter)
+      ctx2.filter = filter
+      ctx2.drawImage(canvas, 0, 0)
+
+      ctx.drawImage(canvas2, 0, 0)
+
+      const newImageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+      const data = newImageData.data
+
+      let n = 0
+      for (let i = 0; i < data.length; i += 4) {
+        if (data[i] > 0) {
+          data[i] = 255
+          data[i + 1] = 255
+          data[i + 2] = 255
+          data[i + 3] = 255
+        } else {
+          data[i] = 0
+          data[i + 1] = 0
+          data[i + 2] = 0
+          data[i + 3] = 255
+        }
+        n++
+      }
+
+      ctx.putImageData(newImageData, 0, 0)
+
+      // Send to cleanup API
+      canvas.toBlob(async (b: Blob | null) => {
+        try {
+          if (!b) {
+            throw new Error('could not convert canvas to blob')
+          }
+          const mask = new File([b], 'mask.png', {
+            type: 'image/png',
+          })
+          const data = new FormData()
+          data.append('image_file', file)
+          data.append('mask_file', mask)
+
+          const res = await fetch(CLEANUP_API_ENDPOINT, {
+            method: 'POST',
+            body: data,
+            headers: {
+              'x-api-key': apiKey,
+            },
+          })
+          if (!res.ok) {
+            throw await res.json()
+          }
+
+          const resultArrayBuffer = await res.arrayBuffer()
+          const resultFile = new File([resultArrayBuffer], 'result.png', {
+            type: 'image/png',
+          })
+          const reader = new FileReader()
+          reader.addEventListener(
+            'load',
+            function () {
+              if (!reader.result) {
+                return
+              }
+              resolve({
+                base64: reader.result.toString(),
+              })
+            },
+            false
+          )
+          reader.readAsDataURL(resultFile)
+        } catch (error) {
+          reject(error)
+        }
+      })
+
+      // document.body.appendChild(canvas)
+    } catch (error) {}
+  })
+}
+
+export async function detectPersons(file: File): Promise<void> {
+  return new Promise(async (resolve, reject) => {
+    try {
       const img = await getImage(file)
-      const [width, height] = [img.naturalWidth, img.naturalHeight]
 
-      // // print out the results of the prediction.
       // @ts-ignore
       model
-        .segmentPersonParts(img, segmentationProperties)
+        .segmentMultiPerson(img, segmentationProperties)
         // @ts-ignore
-        .then(function (segmentation) {
-          console.log('t', arguments)
-          console.log(segmentation)
-
-          // Lets create a canvas to render our findings.
-          var canvas = document.createElement('canvas')
-          canvas.width = segmentation.width
-          canvas.height = segmentation.height
-
-          processSegmentation(canvas, segmentation)
-
-          // Add our canvas to the DOM.
-          // event.target.parentNode.appendChild(canvas)
-          // document.body.appendChild(canvas)
-
-          // Send to cleanup API
-          canvas.toBlob(async (b: Blob | null) => {
-            try {
-              if (!b) {
-                throw new Error('could not convert canvas to blob')
-              }
-              const mask = new File([b], 'mask.png', {
-                type: 'image/png',
-              })
-              const data = new FormData()
-              data.append('image_file', file)
-              data.append('mask_file', mask)
-
-              const res = await fetch(CLEANUP_API_ENDPOINT, {
-                method: 'POST',
-                body: data,
-                headers: {
-                  'x-api-key': apiKey,
-                },
-              })
-              if (!res.ok) {
-                throw await res.json()
-              }
-
-              const resultArrayBuffer = await res.arrayBuffer()
-              const resultFile = new File([resultArrayBuffer], 'result.png', {
-                type: 'image/png',
-              })
-              const reader = new FileReader()
-              reader.addEventListener(
-                'load',
-                function () {
-                  if (!reader.result) {
-                    return
-                  }
-                  resolve({
-                    base64: reader.result.toString(),
-                  })
-                },
-                false
-              )
-              reader.readAsDataURL(resultFile)
-            } catch (error) {
-              reject(error)
-            }
-          })
+        .then(function (segmentations) {
+          processSegmentations(segmentations)
+          resolve()
         })
 
       return
