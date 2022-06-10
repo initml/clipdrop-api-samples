@@ -1,0 +1,18 @@
+<resources>
+    <style name="AppTheme" parent="Theme.Material3.Dark">
+        <!-- Original AppCompat attributes. -->
+        <item name="colorPrimary">@color/my_app_primary</item>
+        <item name="colorAccent">@color/my_app_accent</item>
+        <item name="colorPrimaryDark">@color/my_app_primary_dark</item>
+        <item name="colorSecondary">@color/my_app_secondary</item>
+        <item name="android:colorBackground">@color/my_app_background</item>
+        <item name="colorError">@color/my_app_error</item>
+    </style>
+
+    <color name="my_app_primary">#80BCFF</color>
+    <color name="my_app_primary_dark">#1E1E1E</color>
+    <color name="my_app_secondary">#085A80</color>
+    <color name="my_app_background">#2C2C2C</color>
+    <color name="my_app_error">#992921</color>
+    <color name="my_app_accent">#FFFFFF</color>
+</resources>
