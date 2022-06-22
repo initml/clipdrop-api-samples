@@ -9,7 +9,6 @@ from os import listdir
 from os.path import isfile, join
 
 import numpy as np
-import PIL
 import requests
 from black import main
 from PIL import Image
@@ -51,19 +50,19 @@ def call_remove_background_api(input_file, output_file):
     output_format = os.path.splitext(output_file)[1].lower()
     img_in = open(input_file, 'rb')
     files = {'image_file': ('image.jpeg', img_in, 'image/jpeg')}
+    # Use the extension of the output file to determine the image type
     image_type = {'.png': 'image/png', '.jpeg': 'image/jpeg',
                   '.jpg': 'image/jpeg', '.webp': 'image/webp'}[output_format.lower()]
+    # Create the headers for the API call, mentionning the type of image we whant to get
     headers = {'x-api-key': API_KEY,
                'accept': image_type}
     r = requests.post(REMOVE_BACKGROUND,
-                      stream=True,
                       files=files,
                       headers=headers)
 
     if r.ok:
         with open(output_file, 'wb') as f:
-            for chunk in r:
-                f.write(chunk)
+            f.write(r.content)
     else:
         r.raise_for_status()
 
@@ -73,21 +72,21 @@ def call_super_resolution_api(input_file, output_file, scale=2):
     output_format = os.path.splitext(output_file)[1].lower()
     img_in = open(input_file, 'rb')
     files = {'image_file': ('image.jpeg', img_in, 'image/jpeg')}
+    # Use the extension of the output file to determine the image type
     image_type = {'.png': 'image/png', '.jpeg': 'image/jpeg',
                   '.jpg': 'image/jpeg', '.webp': 'image/webp'}[output_format.lower()]
+    # Create the headers for the API call, mentionning the type of image we whant to get
     headers = {'x-api-key': API_KEY,
-               'accept': image_type}
+               'accept': image_type} #
     data = {'upscale': scale}
     r = requests.post(SUPER_RESOLUTION,
-                      stream=True,
                       files=files,
                       headers=headers,
                       data=data)
 
     if r.ok:
         with open(output_file, 'wb') as f:
-            for chunk in r:
-                f.write(chunk)
+            f.write(r.content)
     else:
         r.raise_for_status()
 
@@ -118,7 +117,7 @@ def composite(image_in, f_out, color='white'):
 def resize(f_in, f_out, new_size):
     """resize an image"""
     img = Image.open(f_in)
-    img.thumbnail(new_size, Image.ANTIALIAS)
+    img.thumbnail(new_size, Image.LANCZOS)
     img = img.convert("RGB")
     img.save(f_out)
 
