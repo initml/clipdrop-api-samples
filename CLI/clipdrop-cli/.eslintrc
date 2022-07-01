@@ -1,0 +1,14 @@
+{
+  "extends": [
+    "oclif",
+    "oclif-typescript"
+  ],
+  "rules": {
+    "operator-linebreak": "off",
+    "unicorn/no-array-for-each": "off",
+    "quotes": ["error", "single"],
+    "object-curly-spacing": ["error", "always"],
+    "semi": ["error", "never"],
+    "@typescript-eslint/explicit-module-boundary-types": "off"
+  }
+}

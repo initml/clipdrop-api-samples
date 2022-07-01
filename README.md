@@ -59,3 +59,13 @@ A sample React/Typescript app that allows processing images in bulk.
 **⚡️ Live app:** https://remove-background-bulk.vercel.app
 
 ![remove-background-bulk](docs/bulk.gif)
+
+# CLI Samples
+
+## [cli/clipdrop-cli](CLI/clipdrop-cli)
+
+A sample cli build with node and tensorflowJS. Remove background, super resolution, and cleanup with object selector powered by tensorflowJS directly from your CLI.
+
+**⚡️ Available on npm:** <https://www.npmjs.com/package/@clipdrop/cli>
+
+![clipdrop-cli](docs/node-cli.gif)
