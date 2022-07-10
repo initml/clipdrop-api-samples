@@ -1,0 +1,21 @@
+{
+	"data": "ENC[AES256_GCM,data:3VJMutjSENYMvlKdHWsjrAY7Lkd+DNi14c5/knihF+58WOw28IVoZAiRMD0kvlerfyCecuSGBwxlrCALydoh4Bjc/6PsPed3LXQ3UnosDNhnG9Xz5gNWNKzar+Vckn4kQeuz9B27/uWNMx8rPbWGCJvqRvyLSupPur0/SWgD4hzlOEPkFD14btW8KnWHC41V42XMvqFDjbdrLp0AhcBnWXFSg5nDnvEyeBHGuNDM4kk6jY6zak8TXvIBuKzI,iv:8UYTbTT1EH65eG/HDwGYDJ6KjYQy4Op3Ka2dZBPcpjw=,tag:MmOq39CcXac9h258Nx3/kw==,type:str]",
+	"sops": {
+		"kms": null,
+		"gcp_kms": [
+			{
+				"resource_id": "projects/arcopypaste/locations/us-central1/keyRings/backend/cryptoKeys/app-secrets",
+				"created_at": "2022-07-10T19:10:37Z",
+				"enc": "CiQAlaPbk3g164Vbc8wl5Ta4SgIz+agZz1fPArsijRGv5LUXaGESSQCZQl5UfLnWuO6Rt4e2fQ3CP/ORASIwsLI+WaTeZ4eBUfgwITCwKJyTwEWuoJ4Iijh+rtDPiug68NdZ9VgkVWYPtD26bEfJjuc="
+			}
+		],
+		"azure_kv": null,
+		"hc_vault": null,
+		"age": null,
+		"lastmodified": "2022-07-10T19:10:38Z",
+		"mac": "ENC[AES256_GCM,data:jAw+s5q5tRVXLITMKegdosw+8kThTNqkvypfmViW3CdXRVdirffvut5kznH03rLQQq9HwomAMzj/H18qXYQBqYA5E9Jy8tZhBy7Ccfm2uzJIVAqI/nWWcgOWzrRvJ/dx6OFLgYQuXyV91LVYMh9B1lsRJyWGZo5BatMZi/SbXWc=,iv:jc9M0m08Xw8r6TTImRzQBMQe1BOUBUyoyQX2nuzAKvY=,tag:LKeOCbHFPiv9AKo7sj0rVw==,type:str]",
+		"pgp": null,
+		"unencrypted_suffix": "_unencrypted",
+		"version": "3.7.3"
+	}
+}

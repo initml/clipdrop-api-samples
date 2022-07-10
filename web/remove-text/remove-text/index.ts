@@ -58,7 +58,7 @@ export async function removeText(file: File, apiKey: string): Promise<Cleanup> {
       }
 
       // text detection
-      const base64File = await getBase64(file)
+      // const base64File = await getBase64(file)
       // Text detection in the item
       const detection = await fetch(VISION_API_ENDPOINT, {
         method: 'POST',
@@ -66,7 +66,7 @@ export async function removeText(file: File, apiKey: string): Promise<Cleanup> {
           requests: [
             {
               image: {
-                content: base64File,
+                content: file,
               },
               features: [
                 {
