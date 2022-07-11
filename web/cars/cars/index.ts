@@ -1,13 +1,13 @@
-type ProfilePicture = {
+type Cars = {
   base64: string
 }
 
 const IS_PROD = !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
 const MOCK_API_CALL = IS_PROD && false
 
-const PROFILE_PICTURE_ENDPOINT :any = process.env.PROFILE_PICTURE_ENDPOINT
+const CARS_ENDPOINT :any = process.env.CARS_ENDPOINT
 
-export async function profilePictures(file: File, apiKey: string): Promise<ProfilePicture> {
+export async function cars(file: File, apiKey: string): Promise<Cars> {
   return new Promise(async (resolve, reject) => {
     try {
       if (MOCK_API_CALL) {
@@ -16,9 +16,25 @@ export async function profilePictures(file: File, apiKey: string): Promise<Profi
       
       const data = new FormData()
       data.append('image_file', file)
-      const res = await fetch(PROFILE_PICTURE_ENDPOINT, {
+      data.append('add_shadow', 'true')
+
+      // -F 'mode=' \
+      // -F 'margin_top=0.15' \
+      // -F 'plate_file=' \
+      // -F 'width=' \
+      // -F 'height=' \
+      // -F 'margin_right=0.15' \
+      // -F 'background_file=' \
+      // -F 'upscale=true' \
+      // -F 'watermark_file=' \
+      // -F 'margin_left=0.15' \
+      // -F 'margin_bottom=0.15' \
+      // -F 'add_shadow=true'
+
+      const res = await fetch(CARS_ENDPOINT, {
         method: 'POST',
-        body: data
+        body: data,
+
       })
       console.log(res.status)
       console.log(res)
@@ -43,7 +59,7 @@ export async function profilePictures(file: File, apiKey: string): Promise<Profi
       reader.readAsDataURL(resultFile)
 
     } catch (e) {
-      console.error('error in profile pictures', e)
+      console.error('error in cars service', e)
       reject(e)
     }
   })
