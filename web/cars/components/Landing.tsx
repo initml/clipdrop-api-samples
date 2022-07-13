@@ -36,10 +36,10 @@ export default function Landing({ file, setFile, apiKey }: LandingProps) {
       <h1 className="flex flex-col items-center space-y-8 text-6xl font-bold">
         <span>
           <span className="bg-gradient-to-tr from-cyan-500 to-blue-600 bg-clip-text text-transparent">
-            Enhance your Car
+          Edit your car images
           </span>
           <br />
-          from any image
+          automatically
         </span>
       </h1>
 

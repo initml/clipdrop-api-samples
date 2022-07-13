@@ -13,31 +13,25 @@ export async function cars(file: File, apiKey: string): Promise<Cars> {
       if (MOCK_API_CALL) {
         return file
       }
-      
+
+      // basic template parameters
       const data = new FormData()
       data.append('image_file', file)
+      data.append('upscale', 'false')
       data.append('add_shadow', 'true')
-
-      // -F 'mode=' \
-      // -F 'margin_top=0.15' \
-      // -F 'plate_file=' \
-      // -F 'width=' \
-      // -F 'height=' \
-      // -F 'margin_right=0.15' \
-      // -F 'background_file=' \
-      // -F 'upscale=true' \
-      // -F 'watermark_file=' \
-      // -F 'margin_left=0.15' \
-      // -F 'margin_bottom=0.15' \
-      // -F 'add_shadow=true'
-
+      data.append('mode', 'cover')
+      data.append('width', '1280')
+      data.append('height', '720')
+  
       const res = await fetch(CARS_ENDPOINT, {
         method: 'POST',
         body: data,
 
       })
-      console.log(res.status)
-      console.log(res)
+      
+      if (!res.ok) {
+        throw new Error('Error with clipdrop-car service')
+      }
       
       const resultArrayBuffer = await res.arrayBuffer()
       const resultFile = new File([resultArrayBuffer], 'result.png', {

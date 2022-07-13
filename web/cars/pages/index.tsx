@@ -7,7 +7,7 @@ import Result from '../components/Result'
 
 const Home: NextPage = () => {
   const [file, setFile] = useState<File | undefined>()
-  const [apiKey, setAPIKey] = useState<string>('')
+  const [apiKey, setAPIKey] = useState<string>('none')
   const [hd, setHD] = useState(false)
 
   useEffect(() => {
@@ -18,7 +18,7 @@ const Home: NextPage = () => {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center">
       <Head>
-        <title>ClipDrop API - Cars</title>
+        <title>ClipDrop Cars</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -30,21 +30,11 @@ const Home: NextPage = () => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              ClipDrop API
+              ClipDrop Cars
             </a>
           </h1>
-          <p className="hidden text-lg font-semibold text-gray-400 sm:block">
-          Cars
-          </p>
         </div>
         <div className="flex items-center space-x-12">
-          <APIKeyInput
-            value={apiKey}
-            onChange={(value: string) => {
-              setAPIKey(value)
-              localStorage.setItem('apiKey', value)
-            }}
-          />
         </div>
       </header>
 
@@ -63,7 +53,7 @@ const Home: NextPage = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by <b className="hover:underline">ClipDrop API</b>
+          Powered by <b className="hover:underline">ClipDrop</b>
         </a>
         <p id="forkongithub">
           <a
