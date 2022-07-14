@@ -15,18 +15,18 @@ export async function cars(file: File, apiKey: string): Promise<Cars> {
       }
 
       // basic template parameters
-      const data = new FormData()
-      data.append('image_file', file)
-      data.append('upscale', 'false')
-      data.append('add_shadow', 'true')
-      data.append('mode', 'cover')
-      data.append('width', '1280')
-      data.append('height', '720')
+      const data = new FormData();
+      data.append('image_file', file);
+      data.append('upscale', 'false');
+      data.append('add_shadow', 'true');
+      data.append('add_watermark', 'true');
+      data.append('mode', 'cover');
+      data.append('width', '1280');
+      data.append('height', '720');
   
       const res = await fetch(CARS_ENDPOINT, {
         method: 'POST',
         body: data,
-
       })
       
       if (!res.ok) {
