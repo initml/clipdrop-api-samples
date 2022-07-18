@@ -1,4 +1,4 @@
-# Car vertical
+# Car vertical sample
 
 A sample React/Next.js/TailwindCSS app that ...
 
