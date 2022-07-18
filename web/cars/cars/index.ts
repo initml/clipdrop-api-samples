@@ -5,7 +5,7 @@ type Cars = {
 const IS_PROD = !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
 const MOCK_API_CALL = IS_PROD && false
 
-const CARS_ENDPOINT :any = process.env.CARS_ENDPOINT
+const CARS_ENDPOINT :any = process.env.NEXT_PUBLIC_CARS_ENDPOINT
 
 export async function cars(file: File): Promise<Cars> {
   return new Promise(async (resolve, reject) => {
