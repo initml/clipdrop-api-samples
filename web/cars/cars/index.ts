@@ -7,7 +7,7 @@ const MOCK_API_CALL = IS_PROD && false
 
 const CARS_ENDPOINT :any = process.env.CARS_ENDPOINT
 
-export async function cars(file: File, apiKey: string): Promise<Cars> {
+export async function cars(file: File): Promise<Cars> {
   return new Promise(async (resolve, reject) => {
     try {
       if (MOCK_API_CALL) {

@@ -5,13 +5,12 @@ import { downloadImage } from '../utils'
 import { parse } from 'path'
 
 interface ResultProps {
-  apiKey: string
   file: File | undefined
   setFile: (file: File | undefined) => void
   hd: boolean
 }
 
-export default function Result({ file, setFile, apiKey, hd }: ResultProps) {
+export default function Result({ file, setFile, hd }: ResultProps) {
   const [src, setSrc] = useState<string | undefined>(undefined)
   const [processing, setProcessing] = useState(false)
 
@@ -29,7 +28,7 @@ export default function Result({ file, setFile, apiKey, hd }: ResultProps) {
     setSrc(newSrc)
     setProcessing(true)
     // return
-    cars(file, apiKey)
+    cars(file)
       .then(
         (cars_output) => {
           setSrc(cars_output.base64)

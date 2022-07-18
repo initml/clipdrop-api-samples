@@ -1,19 +1,13 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
-import APIKeyInput from '../components/APIKeyInput'
 import Landing from '../components/Landing'
 import Result from '../components/Result'
 
 const Home: NextPage = () => {
   const [file, setFile] = useState<File | undefined>()
-  const [apiKey, setAPIKey] = useState<string>('none')
   const [hd, setHD] = useState(false)
 
-  useEffect(() => {
-    const key = localStorage.getItem('apiKey') || ''
-    setAPIKey(key)
-  }, [])
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center">
@@ -39,10 +33,10 @@ const Home: NextPage = () => {
       </header>
 
       <main className="flex w-full flex-1 flex-col items-center justify-center text-center">
-        {file && apiKey ? (
-          <Result file={file} setFile={setFile} apiKey={apiKey} hd={hd} />
+        {file ? (
+          <Result file={file} setFile={setFile}hd={hd} />
         ) : (
-          <Landing file={file} setFile={setFile} apiKey={apiKey} />
+          <Landing file={file} setFile={setFile} />
         )}
       </main>
 

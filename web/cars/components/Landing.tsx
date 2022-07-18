@@ -7,10 +7,9 @@ const ALLOWED_FILES = ['image/png', 'image/jpeg']
 interface LandingProps {
   file: File | undefined
   setFile: (file: File | undefined) => void
-  apiKey: string | undefined
 }
 
-export default function Landing({ file, setFile, apiKey }: LandingProps) {
+export default function Landing({ file, setFile }: LandingProps) {
   const inputFileRef = useRef<HTMLInputElement | null>(null)
 
   const handleFilesSelected = useCallback((files: FileList | Array<File>) => {
@@ -47,8 +46,7 @@ export default function Landing({ file, setFile, apiKey }: LandingProps) {
         className={twMerge(
           'mt-16',
           'w-full overflow-hidden rounded-3xl',
-          'border-4 border-dashed border-black',
-          !apiKey ? 'pointer-events-none opacity-10' : ''
+          'border-4 border-dashed border-black'
         )}
       >
         <DropZone
@@ -67,9 +65,8 @@ export default function Landing({ file, setFile, apiKey }: LandingProps) {
             onClick={() => inputFileRef.current?.click()}
           >
             <p className="mx-16 text-center font-bold opacity-100">
-              {apiKey
-                ? 'Drag & drop an image or click here to select'
-                : 'Set your ClipDrop API key to get started'}
+              {'Drag & drop an image or click here to select'
+              }
             </p>
             <input
               type="file"
