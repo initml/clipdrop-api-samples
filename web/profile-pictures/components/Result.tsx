@@ -7,8 +7,8 @@ import { parse } from 'path'
 interface ResultProps {
   file: File | undefined
   setFile: (file: File | undefined) => void
-  template : string | undefined
-  color : string | undefined
+  template : string
+  color : string
   setRunProcessing : (run_processing: boolean) => void
 }
 

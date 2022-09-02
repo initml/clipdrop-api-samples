@@ -50,7 +50,7 @@ const Home: NextPage = () => {
   // Dropdown template
   const [showDropDownTemplate, setShowDropDownTemplate] = useState<boolean>(false);
   const templates = () => { return Object.values(Templates);};
-  const [selectTemplate, setSelectTemplate] = useState<string | undefined>(Templates.HEAD_INSIDE_CIRCLE);
+  const [selectTemplate, setSelectTemplate] = useState<string>(Templates.HEAD_INSIDE_CIRCLE);
   const toggleDropDownTemplate = () => {
     setShowDropDownTemplate(!showDropDownTemplate);
   };
@@ -67,7 +67,7 @@ const Home: NextPage = () => {
   // Dropdown color
   const [showDropDownColor, setShowDropDownColor] = useState<boolean>(false);
   const colors = () => { return Object.values(Colors);};
-  const [selectColor, setSelectColor] = useState<string>(Colors.LIGHTGREEN);
+  const [selectColor, setSelectColor] = useState<string>(Colors.SALMON);
   const toggleDropDownColor = () => {
     setShowDropDownColor(!showDropDownColor);
   };
