@@ -65,8 +65,9 @@ export default function Landing({ file, setFile }: LandingProps) {
             onClick={() => inputFileRef.current?.click()}
           >
             <p className="mx-16 text-center font-bold opacity-100">
-              {'Drag & drop an image or click here to select'
-              }
+            {file ? 
+               file.name : 'Drag & drop an image or click here to select'
+            }
             </p>
             <input
               type="file"

@@ -91,3 +91,11 @@ button.active {
 .dropdown > p:last-child {
   border-bottom: 0 none;
 }
+
+button.process {
+  color: #fff;
+  background-color: #0062cc;
+}
+button.process:hover {
+  background-color:  rgb(235, 235, 235);
+}

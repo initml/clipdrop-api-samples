@@ -11,7 +11,7 @@ enum Templates {
   HEAD_OUTSIDE_CIRCLE = "head outside circle",
   HALF_BODY_GRAYSCALE = "half body grayscale",
   HEAD_INSIDE_SQUARE = "head inside square",
-  CLOSE_UP = "close up",
+  CLOSE_UP = "close-up",
   PENCIL_EFFECT = "pencil effect",
   AURA_EFFECT = "aura effect",
   HEAD_INSIDE_CIRCLE_GRADIENT = "head inside circle gradient",
@@ -45,10 +45,12 @@ enum Colors {
 
 const Home: NextPage = () => {
   const [file, setFile] = useState<File | undefined>()
+  const [run_processing, setRunProcessing] = useState<boolean>(false)
 
+  // Dropdown template
   const [showDropDownTemplate, setShowDropDownTemplate] = useState<boolean>(false);
   const templates = () => { return Object.values(Templates);};
-  const [selectTemplate, setSelectTemplate] = useState<string>("");
+  const [selectTemplate, setSelectTemplate] = useState<string | undefined>(Templates.HEAD_INSIDE_CIRCLE);
   const toggleDropDownTemplate = () => {
     setShowDropDownTemplate(!showDropDownTemplate);
   };
@@ -58,9 +60,14 @@ const Home: NextPage = () => {
     }
   };
 
+  const templateSelection = (template: string): void => {
+    setSelectTemplate(template);
+  };
+
+  // Dropdown color
   const [showDropDownColor, setShowDropDownColor] = useState<boolean>(false);
   const colors = () => { return Object.values(Colors);};
-  const [selectColor, setSelectColor] = useState<string>("");
+  const [selectColor, setSelectColor] = useState<string>(Colors.LIGHTGREEN);
   const toggleDropDownColor = () => {
     setShowDropDownColor(!showDropDownColor);
   };
@@ -68,10 +75,6 @@ const Home: NextPage = () => {
     if (event.currentTarget === event.target) {
       setShowDropDownColor(false);
     }
-  };
-
-  const templateSelection = (template: string): void => {
-    setSelectTemplate(template);
   };
   const colorSelection = (color: string): void => {
     setSelectColor(color);
@@ -101,8 +104,8 @@ const Home: NextPage = () => {
       </header>
 
       <main className="flex w-full flex-1 flex-col items-center justify-center text-center">
-        {file && selectTemplate !== '' ? (
-          <Result file={file} setFile={setFile} template={selectTemplate} color={selectColor}/>
+        {file && selectTemplate !== undefined && run_processing ? (
+          <Result file={file} setFile={setFile} template={selectTemplate} color={selectColor} setRunProcessing={setRunProcessing}/>
         ) : (
           <div>
           <Landing file={file} setFile={setFile} />
@@ -113,7 +116,8 @@ const Home: NextPage = () => {
               dismissHandlerTemplate(e)
             }
           >
-            <div>{selectTemplate ? selectTemplate : "Select a template"} </div>
+            <div>
+              {selectTemplate ? "Template: " + selectTemplate : "Select a template"} </div>
             {showDropDownTemplate && (
               <DropDown
                 choices={templates()}
@@ -130,7 +134,7 @@ const Home: NextPage = () => {
               dismissHandlerColor(e)
             }
           >
-            <div>{selectColor ? selectColor : "Select a background color"} </div>
+            <div>{selectColor ? "Color: " + selectColor : "Select a background color"} </div>
             {showDropDownColor && (
               <DropDown
               choices={colors()}
@@ -139,6 +143,16 @@ const Home: NextPage = () => {
               choiceSelection={colorSelection}
             />
             )}
+          </button>
+          <button
+          className='process'
+              onClick={(): void => {
+                if (file && selectTemplate !== undefined) {
+                  setRunProcessing(true)}
+                }
+              }        
+            >
+              Process
           </button>
         </div>
         )}

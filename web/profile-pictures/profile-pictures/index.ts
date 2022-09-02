@@ -6,7 +6,7 @@ const IS_PROD = !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
 const MOCK_API_CALL = IS_PROD && false
 const PROFILE_PICTURES_ENDPOINT :any = process.env.NEXT_PUBLIC_PROFILE_PICTURES_ENDPOINT
 
-export async function profile_pictures(file: File, template:string, background_color:string): Promise<ProfilePictures> {
+export async function profile_pictures(file: File, template:string , background_color:string ): Promise<ProfilePictures> {
   return new Promise(async (resolve, reject) => {
     try {
       if (MOCK_API_CALL) {

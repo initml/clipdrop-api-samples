@@ -7,17 +7,18 @@ import { parse } from 'path'
 interface ResultProps {
   file: File | undefined
   setFile: (file: File | undefined) => void
-  template : string
-  color : string
+  template : string | undefined
+  color : string | undefined
+  setRunProcessing : (run_processing: boolean) => void
 }
 
-export default function Result({ file, setFile, template, color}: ResultProps) {
+export default function Result({ file, setFile, template, color, setRunProcessing}: ResultProps) {
   const [src, setSrc] = useState<string | undefined>(undefined)
   const [processing, setProcessing] = useState(false)
 
   const reset = useCallback(() => {
     setSrc(undefined)
-    setFile(undefined)
+    setRunProcessing(false)
   }, [])
 
   // Process the image when set
