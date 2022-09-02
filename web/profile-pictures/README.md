@@ -1,6 +1,6 @@
 # Profile-pictures vertical sample
 
-A sample React/Next.js/TailwindCSS app that ...
+A sample React/Next.js/TailwindCSS app that creates stunning profile pictures 
 
 ### Decrypt env variable with [SOPS](https://github.com/mozilla/sops)
 
