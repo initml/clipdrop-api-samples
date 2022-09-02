@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Landing from '../components/Landing'
 import Result from '../components/Result'
 import DropDown from '../components/DropDown'
@@ -8,14 +8,14 @@ import DropDown from '../components/DropDown'
 enum Templates {
   HEAD_INSIDE_CIRCLE = "head inside circle",
   HEAD_INSIDE_CIRCLE_GRAYSCALE = "head inside circle grayscale",
-  HEAD_INSIDE_CIRCLE_GRADIENT = "head inside circle gradient",
   HEAD_OUTSIDE_CIRCLE = "head outside circle",
   HALF_BODY_GRAYSCALE = "half body grayscale",
   HEAD_INSIDE_SQUARE = "head inside square",
-  HEAD_INSIDE_SQUARE_GRADIENT = "head inside square gradient",
   CLOSE_UP = "close up",
   PENCIL_EFFECT = "pencil effect",
-  AURA_EFFECT = "aura effect"
+  AURA_EFFECT = "aura effect",
+  HEAD_INSIDE_CIRCLE_GRADIENT = "head inside circle gradient",
+  HEAD_INSIDE_SQUARE_GRADIENT = "head inside square gradient",
 }
 
 enum Colors {
@@ -40,20 +40,6 @@ enum Colors {
   BLUEGREEN = "blue green",
   VIOLET = "violet",
   LIGHTVIOLET = "light violet"
-}
-
-enum Filters {
-  INKWELL = "inkwell",
-  ADEN = "aden",
-  XPRO2 = "xpro2",
-  EARLYBIRD = "earlybird",
-  KELVIN = "kelvin",
-  RISE = "rise",
-  WILLOW = "willow",
-  BRANNAN = "brannan",
-  MAVEN = "maven",
-  LIGHTBLUE = "light blue",
-  LIGHTPINK = "light pink"
 }
 
 
@@ -84,19 +70,11 @@ const Home: NextPage = () => {
     }
   };
 
-  const filters = () => { return Object.values(Filters);};
-  const [selectFilter, setSelectFilter] = useState<string>("");
-
-
-
   const templateSelection = (template: string): void => {
     setSelectTemplate(template);
   };
   const colorSelection = (color: string): void => {
     setSelectColor(color);
-  };
-  const filterSelection = (filter: string): void => {
-    setSelectFilter(filter);
   };
 
   return (
@@ -123,45 +101,45 @@ const Home: NextPage = () => {
       </header>
 
       <main className="flex w-full flex-1 flex-col items-center justify-center text-center">
-        {file && selectTemplate !== null ? (
+        {file && selectTemplate !== '' ? (
           <Result file={file} setFile={setFile} template={selectTemplate} color={selectColor}/>
         ) : (
           <div>
-        <Landing file={file} setFile={setFile} />
-        <button
-          className={showDropDownTemplate ? "active" : undefined}
-          onClick={(): void => toggleDropDownTemplate()}
-          onBlur={(e: React.FocusEvent<HTMLButtonElement>): void =>
-            dismissHandlerTemplate(e)
-          }
-        >
-          <div>{selectTemplate ? selectTemplate : "Select a template"} </div>
-          {showDropDownTemplate && (
-            <DropDown
-              choices={templates()}
+          <Landing file={file} setFile={setFile} />
+          <button
+            className={showDropDownTemplate ? "active" : undefined}
+            onClick={(): void => toggleDropDownTemplate()}
+            onBlur={(e: React.FocusEvent<HTMLButtonElement>): void =>
+              dismissHandlerTemplate(e)
+            }
+          >
+            <div>{selectTemplate ? selectTemplate : "Select a template"} </div>
+            {showDropDownTemplate && (
+              <DropDown
+                choices={templates()}
+                showDropDown={false}
+                toggleDropDown={(): void => toggleDropDownTemplate()}
+                choiceSelection={templateSelection}
+              />
+            )}
+          </button>
+          <button
+            className={showDropDownColor ? "active" : undefined}
+            onClick={(): void => toggleDropDownColor()}
+            onBlur={(e: React.FocusEvent<HTMLButtonElement>): void =>
+              dismissHandlerColor(e)
+            }
+          >
+            <div>{selectColor ? selectColor : "Select a background color"} </div>
+            {showDropDownColor && (
+              <DropDown
+              choices={colors()}
               showDropDown={false}
-              toggleDropDown={(): void => toggleDropDownTemplate()}
-              choiceSelection={templateSelection}
+              toggleDropDown={(): void => toggleDropDownColor()}
+              choiceSelection={colorSelection}
             />
-          )}
-        </button>
-        <button
-          className={showDropDownColor ? "active" : undefined}
-          onClick={(): void => toggleDropDownColor()}
-          onBlur={(e: React.FocusEvent<HTMLButtonElement>): void =>
-            dismissHandlerColor(e)
-          }
-        >
-          <div>{selectColor ? selectColor : "Select a background color"} </div>
-          {showDropDownColor && (
-            <DropDown
-            choices={colors()}
-            showDropDown={false}
-            toggleDropDown={(): void => toggleDropDownColor()}
-            choiceSelection={colorSelection}
-          />
-          )}
-        </button>
+            )}
+          </button>
         </div>
         )}
       </main>
