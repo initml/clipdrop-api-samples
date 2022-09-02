@@ -59,3 +59,18 @@ A sample React/Typescript app that allows processing images in bulk.
 **⚡️ Live app:** https://remove-background-bulk.vercel.app
 
 ![remove-background-bulk](docs/bulk.gif)
+
+## Our tools
+
+ClipDrop API is made with love by [ClipDrop](http://clipdrop.co/). 
+Take a look at our other ClipDrop web apps: 
+- [Remove background](https://clipdrop.co/remove-background)
+- [Cleanup](https://clipdrop.co/cleanup)
+- [Image Upscaler](https://clipdrop.co/image-upscaler)
+- [Relight](https://clipdrop.co/relight)
+
+Our [Cleanup.pictures](https://cleanup.pictures/) website 
+
+Or try one of our mobile apps:
+- [iOS](https://apps.apple.com/app/clipdrop-ar-copy-paste/id1512594879)
+- [Android](https://play.google.com/store/apps/details?id=app.arcopypaste)
