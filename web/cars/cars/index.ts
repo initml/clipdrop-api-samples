@@ -17,7 +17,7 @@ export async function cars(file: File): Promise<Cars> {
       // basic template parameters
       const data = new FormData();
       data.append('image_file', file);
-      data.append('upscale', 'true');
+      data.append('upscale', 'false');
       data.append('add_shadow', 'true');
       data.append('add_watermark', 'true');
       data.append('mode', 'cover');
