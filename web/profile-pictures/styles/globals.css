@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.scan {
+  width: 200px;
+  height: 200px;
+}
+.scan::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 5px;
+  background: #fff;
+  box-shadow: 0 0 70px 20px #fff;
+  clip-path: inset(0);
+  animation: x 0.75s ease-in-out infinite alternate, y 1.5s ease-in-out infinite;
+}
+
+@keyframes x {
+  to {
+    transform: translateX(-100%);
+    left: 100%;
+  }
+}
+
+@keyframes y {
+  33% {
+    clip-path: inset(0 0 0 -100px);
+  }
+  50% {
+    clip-path: inset(0 0 0 0);
+  }
+  83% {
+    clip-path: inset(0 -100px 0 0);
+  }
+}
+
+
+button {
+  position: relative;
+  padding: 0.375rem 0.88rem;
+  color: #333;
+  background-color: #ddd;
+  border-color: #ddd;
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border: 1px solid transparent;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  border-radius: 0.35rem;
+  cursor: pointer;
+  margin: 10px 10px 10px 10px;
+}
+button:hover {
+  color: #fff;
+  background-color: #0069d9;
+}
+button.active {
+  color: #fff;
+  background-color: #0069d9;
+}
+.dropdown {
+  position: absolute;
+  top: 38px;
+  left: -1px;
+  border: 1px solid rgb(197, 197, 197);
+  background: #fff;
+  padding: 0;
+  color: #0062cc;
+  text-align: left;
+  border-radius: 0.25rem;
+}
+.dropdown > p {
+  margin: 0;
+  padding: 0.375rem 0.88rem;
+  border-bottom: 1px solid rgb(235, 235, 235);
+  min-width: 140px;
+}
+.dropdown > p:hover {
+  color: #fff;
+  background-color: #0062cc;
+}
+.dropdown > p:last-child {
+  border-bottom: 0 none;
+}

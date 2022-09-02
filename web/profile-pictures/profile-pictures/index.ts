@@ -1,13 +1,13 @@
-type Cars = {
+type ProfilePictures = {
   base64: string
 }
 
 const IS_PROD = !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
 const MOCK_API_CALL = IS_PROD && false
 
-const CARS_ENDPOINT :any = process.env.NEXT_PUBLIC_CARS_ENDPOINT
+const PROFILE_PICTURES_ENDPOINT :any = process.env.NEXT_PUBLIC_PROFILE_PICTURES_ENDPOINT
 
-export async function cars(file: File): Promise<Cars> {
+export async function profile_pictures(file: File, template:string, color:string): Promise<ProfilePictures> {
   return new Promise(async (resolve, reject) => {
     try {
       if (MOCK_API_CALL) {
@@ -16,21 +16,19 @@ export async function cars(file: File): Promise<Cars> {
 
       // basic template parameters
       const data = new FormData();
-      data.append('image_file', file);
-      data.append('upscale', 'true');
-      data.append('add_shadow', 'true');
-      data.append('add_watermark', 'true');
-      data.append('mode', 'cover');
-      data.append('width', '1280');
-      data.append('height', '720');
-  
-      const res = await fetch(CARS_ENDPOINT, {
+      data.append('image_files', file);
+      data.append('template', template);
+      data.append('output_width', '512');
+      data.append('output_height', '512');
+      data.append('background_color', color);
+
+      const res = await fetch(PROFILE_PICTURES_ENDPOINT, {
         method: 'POST',
         body: data,
       })
       
       if (!res.ok) {
-        throw new Error('Error with clipdrop-car service')
+        throw new Error('Error with profile pictures service')
       }
       
       const resultArrayBuffer = await res.arrayBuffer()
@@ -53,7 +51,7 @@ export async function cars(file: File): Promise<Cars> {
       reader.readAsDataURL(resultFile)
 
     } catch (e) {
-      console.error('error in cars service', e)
+      console.error('error in profile pictures service', e)
       reject(e)
     }
   })
