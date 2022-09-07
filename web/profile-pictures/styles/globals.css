@@ -85,10 +85,6 @@ button.active {
   border-bottom: 1px solid rgb(235, 235, 235);
   min-width: 140px;
 }
-.gallery > p:hover {
-  color: #fff;
-  background-color: #0062cc;
-}
 .gallery > p:last-child {
   border-bottom: 0 none;
 }

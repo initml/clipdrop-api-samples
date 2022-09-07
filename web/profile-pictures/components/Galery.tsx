@@ -9,8 +9,11 @@ const Gallery: React.FC<GalleryProps> = ({
   choices,
   choiceSelection,
 }: GalleryProps): JSX.Element => {
-  const onClickHandler = (choice: string): void => {
+  const [selection, setSelection] = useState<string | undefined>(undefined);
+
+  const handleClick = (choice: string): void => {
     choiceSelection(choice);
+    setSelection(choice);
   };
 
   return (
@@ -21,8 +24,11 @@ const Gallery: React.FC<GalleryProps> = ({
             return (
               <p
                 key={index}
+                style={{
+                  backgroundColor: choice == selection ? '#0062cc' : 'white',
+                }}
                 onClick={(): void => {
-                  onClickHandler(choice);
+                  handleClick(choice);
                 }}
               >
                 <img
