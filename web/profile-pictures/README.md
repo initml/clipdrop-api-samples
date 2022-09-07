@@ -5,7 +5,7 @@ A sample React/Next.js/TailwindCSS app that creates stunning profile pictures
 ### Decrypt env variable with [SOPS](https://github.com/mozilla/sops)
 
 ```bash
-sops -d next.config.js.encrypted > next.config.js
+sops -d encrypted.env > .env
 ```
 
 ### Setup:
