@@ -6,13 +6,16 @@ import { parse } from 'path'
 
 interface ResultProps {
   file: File | undefined
-  setFile: (file: File | undefined) => void
-  template : string
-  color : string
   setRunProcessing : (run_processing: boolean) => void
+  template : string | undefined
+  upscale:string | undefined
 }
 
-export default function Result({ file, setFile, template, color, setRunProcessing}: ResultProps) {
+export default function Result({
+  file,
+  template,
+  upscale,
+  setRunProcessing}: ResultProps) {
   const [src, setSrc] = useState<string | undefined>(undefined)
   const [processing, setProcessing] = useState(false)
 
@@ -30,7 +33,11 @@ export default function Result({ file, setFile, template, color, setRunProcessin
     setSrc(newSrc)
     setProcessing(true)
     // return
-    profile_pictures(file, template, color)
+    profile_pictures(
+      file,
+      template,
+      upscale,
+      )
       .then(
         (profile_pictures_output) => {
           setSrc(profile_pictures_output.base64)
@@ -102,7 +109,7 @@ export default function Result({ file, setFile, template, color, setRunProcessin
               let resultName = 'background.png'
               if (file?.name) {
                 const { name } = parse(file.name)
-                resultName = `${name}-clipdrop-text-removal.png`
+                resultName = `${name}-clipdrop-profile-pictures.png`
               }
 
               downloadImage(src, resultName)

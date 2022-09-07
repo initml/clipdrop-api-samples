@@ -4,80 +4,28 @@ import { useState } from 'react'
 import Landing from '../components/Landing'
 import Result from '../components/Result'
 import DropDown from '../components/DropDown'
-
-enum Templates {
-  HEAD_INSIDE_CIRCLE = "head inside circle",
-  HEAD_INSIDE_CIRCLE_GRAYSCALE = "head inside circle grayscale",
-  HEAD_OUTSIDE_CIRCLE = "head outside circle",
-  HALF_BODY_GRAYSCALE = "half body grayscale",
-  HEAD_INSIDE_SQUARE = "head inside square",
-  CLOSE_UP = "close-up",
-  PENCIL_EFFECT = "pencil effect",
-  AURA_EFFECT = "aura effect",
-  HEAD_INSIDE_CIRCLE_GRADIENT = "head inside circle gradient",
-  HEAD_INSIDE_SQUARE_GRADIENT = "head inside square gradient",
-}
-
-enum Colors {
-  WHITE = "white",
-  BLACK = "black",
-  GRAY = "gray",
-  LIGHTGRAY = "light gray",
-  GOLD = "gold",
-  YELLOW = "yellow",
-  LIGHTYELLOW = "light yellow",
-  ORANGE = "orange",
-  LIGHTSALMON = "light salmon",
-  SALMON = "salmon",
-  PINK = "pink",
-  LIGHTPINK = "light pink",
-  LIGHTRED = "light red",
-  DARKRED = "dark red",
-  BLUE = "blue",
-  DARKBLUE = "dark blue",
-  LIGHTBLUE = "light blue",
-  LIGHTGREEN = "light green",
-  BLUEGREEN = "blue green",
-  VIOLET = "violet",
-  LIGHTVIOLET = "light violet"
-}
-
+import Checkbox from '../components/CheckBox'
+import { Templates } from '../profile-pictures/configuration'
 
 const Home: NextPage = () => {
   const [file, setFile] = useState<File | undefined>()
   const [run_processing, setRunProcessing] = useState<boolean>(false)
 
+  const templates = () => { return Object.values(Templates);};
+
   // Dropdown template
   const [showDropDownTemplate, setShowDropDownTemplate] = useState<boolean>(false);
-  const templates = () => { return Object.values(Templates);};
-  const [selectTemplate, setSelectTemplate] = useState<string>(Templates.HEAD_INSIDE_CIRCLE);
-  const toggleDropDownTemplate = () => {
-    setShowDropDownTemplate(!showDropDownTemplate);
-  };
+  const [selectTemplate, setSelectTemplate] = useState<string | undefined>(undefined);
+  const toggleDropDownTemplate = () => {setShowDropDownTemplate(!showDropDownTemplate);};
   const dismissHandlerTemplate = (event: React.FocusEvent<HTMLButtonElement>): void => {
-    if (event.currentTarget === event.target) {
-      setShowDropDownTemplate(false);
-    }
+    if (event.currentTarget === event.target) {setShowDropDownTemplate(false);}
   };
+  const templateSelection = (template: string): void => {setSelectTemplate(template);};
 
-  const templateSelection = (template: string): void => {
-    setSelectTemplate(template);
-  };
-
-  // Dropdown color
-  const [showDropDownColor, setShowDropDownColor] = useState<boolean>(false);
-  const colors = () => { return Object.values(Colors);};
-  const [selectColor, setSelectColor] = useState<string>(Colors.SALMON);
-  const toggleDropDownColor = () => {
-    setShowDropDownColor(!showDropDownColor);
-  };
-  const dismissHandlerColor = (event: React.FocusEvent<HTMLButtonElement>): void => {
-    if (event.currentTarget === event.target) {
-      setShowDropDownColor(false);
-    }
-  };
-  const colorSelection = (color: string): void => {
-    setSelectColor(color);
+  // upscale checkbox
+  const [upscale, setUpscale] = useState(false);
+  const handleUpscale = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUpscale(e.target.checked);
   };
 
   return (
@@ -105,10 +53,18 @@ const Home: NextPage = () => {
 
       <main className="flex w-full flex-1 flex-col items-center justify-center text-center">
         {file && selectTemplate !== undefined && run_processing ? (
-          <Result file={file} setFile={setFile} template={selectTemplate} color={selectColor} setRunProcessing={setRunProcessing}/>
+          <Result
+            file={file}
+            template={selectTemplate}
+            upscale={upscale.toString()}
+            setRunProcessing={setRunProcessing}
+        />
         ) : (
+          <>
           <div>
           <Landing file={file} setFile={setFile} />
+
+          <div>
           <button
             className={showDropDownTemplate ? "active" : undefined}
             onClick={(): void => toggleDropDownTemplate()}
@@ -117,7 +73,7 @@ const Home: NextPage = () => {
             }
           >
             <div>
-              {selectTemplate ? "Template: " + selectTemplate : "Select a template"} </div>
+              {selectTemplate ? selectTemplate : "Template"} </div>
             {showDropDownTemplate && (
               <DropDown
                 choices={templates()}
@@ -127,23 +83,11 @@ const Home: NextPage = () => {
               />
             )}
           </button>
-          <button
-            className={showDropDownColor ? "active" : undefined}
-            onClick={(): void => toggleDropDownColor()}
-            onBlur={(e: React.FocusEvent<HTMLButtonElement>): void =>
-              dismissHandlerColor(e)
-            }
-          >
-            <div>{selectColor ? "Color: " + selectColor : "Select a background color"} </div>
-            {showDropDownColor && (
-              <DropDown
-              choices={colors()}
-              showDropDown={false}
-              toggleDropDown={(): void => toggleDropDownColor()}
-              choiceSelection={colorSelection}
-            />
-            )}
-          </button>
+            <Checkbox
+          handleChange={handleUpscale}
+          isChecked={upscale}
+          label="Upscale"
+        />
           <button
           className='process'
               onClick={(): void => {
@@ -154,14 +98,16 @@ const Home: NextPage = () => {
             >
               Process
           </button>
+          </div>
         </div>
+        </>
         )}
       </main>
 
       <footer className="mt-4 flex h-24 w-full items-center justify-center space-x-12 border-t">
         <a
           className="flex items-center justify-center gap-2"
-          href="https://clipdrop.co/apis?utm_source=api-sample&utm_medium=text-removal"
+          href="https://clipdrop.co/apis?utm_source=api-sample&utm_medium=profile-pictures"
           target="_blank"
           rel="noopener noreferrer"
         >
