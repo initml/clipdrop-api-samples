@@ -3,26 +3,19 @@ import Head from 'next/head'
 import { useState } from 'react'
 import Landing from '../components/Landing'
 import Result from '../components/Result'
-import DropDown from '../components/DropDown'
-import Checkbox from '../components/CheckBox'
+import Gallery from '../components/Galery'
 import { Templates } from '../profile-pictures/configuration'
 
 const Home: NextPage = () => {
   const [file, setFile] = useState<File | undefined>()
   const [run_processing, setRunProcessing] = useState<boolean>(false)
 
+  // Templates
   const templates = () => { return Object.values(Templates);};
-
-  // Dropdown template
-  const [showDropDownTemplate, setShowDropDownTemplate] = useState<boolean>(false);
   const [selectTemplate, setSelectTemplate] = useState<string | undefined>(undefined);
-  const toggleDropDownTemplate = () => {setShowDropDownTemplate(!showDropDownTemplate);};
-  const dismissHandlerTemplate = (event: React.FocusEvent<HTMLButtonElement>): void => {
-    if (event.currentTarget === event.target) {setShowDropDownTemplate(false);}
-  };
   const templateSelection = (template: string): void => {setSelectTemplate(template);};
 
-  // upscale checkbox
+  // Upscale
   const [upscale, setUpscale] = useState(false);
   const handleUpscale = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUpscale(e.target.checked);
@@ -65,29 +58,10 @@ const Home: NextPage = () => {
           <Landing file={file} setFile={setFile} />
 
           <div>
-          <button
-            className={showDropDownTemplate ? "active" : undefined}
-            onClick={(): void => toggleDropDownTemplate()}
-            onBlur={(e: React.FocusEvent<HTMLButtonElement>): void =>
-              dismissHandlerTemplate(e)
-            }
-          >
-            <div>
-              {selectTemplate ? selectTemplate : "Template"} </div>
-            {showDropDownTemplate && (
-              <DropDown
+          <Gallery
                 choices={templates()}
-                showDropDown={false}
-                toggleDropDown={(): void => toggleDropDownTemplate()}
                 choiceSelection={templateSelection}
               />
-            )}
-          </button>
-            <Checkbox
-          handleChange={handleUpscale}
-          isChecked={upscale}
-          label="Upscale"
-        />
           <button
           className='process'
               onClick={(): void => {

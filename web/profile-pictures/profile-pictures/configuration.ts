@@ -25,15 +25,20 @@ export enum Geometries {
     CLOSE_UP = "close up"
 }
 
+enum TemplatesName {
+
+}
+
 export enum Templates {
-    TEMPLATE1 = "circle, intense",
-    TEMPLATE2 = "circle outside, gradient",
-    TEMPLATE3 = "square, grayscale",
-    TEMPLATE4 = "pencil effect",
-    TEMPLATE5 = "keep background, winter",
-    TEMPLATE6 = "aura effect",
-    TEMPLATE7 = "square, gradient",
-    TEMPLATE8 = "close-up",
+    TEMPLATE1 = "template-1",
+    TEMPLATE2 = "template-2",
+    TEMPLATE3 = "template-3",
+    TEMPLATE4 = "template-4",
+    TEMPLATE5 = "template-5",
+    TEMPLATE6 = "template-6",
+    TEMPLATE7 = "template-7",
+    TEMPLATE8 = "template-8",
+    TEMPLATE9 = "template-9"
   }
   
 export enum Colors {

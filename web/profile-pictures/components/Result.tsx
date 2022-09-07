@@ -109,7 +109,7 @@ export default function Result({
               let resultName = 'background.png'
               if (file?.name) {
                 const { name } = parse(file.name)
-                resultName = `${name}-clipdrop-profile-pictures.png`
+                resultName = `${name}-clipdrop-profile-pictures-${template}.png`
               }
 
               downloadImage(src, resultName)

@@ -67,8 +67,9 @@ button.active {
   color: #fff;
   background-color: #0069d9;
 }
-.dropdown {
-  position: absolute;
+.gallery {
+  display: flex;
+  flex-direction: row;
   top: 38px;
   left: -1px;
   border: 1px solid rgb(197, 197, 197);
@@ -78,17 +79,17 @@ button.active {
   text-align: left;
   border-radius: 0.25rem;
 }
-.dropdown > p {
+.gallery > p {
   margin: 0;
   padding: 0.375rem 0.88rem;
   border-bottom: 1px solid rgb(235, 235, 235);
   min-width: 140px;
 }
-.dropdown > p:hover {
+.gallery > p:hover {
   color: #fff;
   background-color: #0062cc;
 }
-.dropdown > p:last-child {
+.gallery > p:last-child {
   border-bottom: 0 none;
 }
 
@@ -98,12 +99,4 @@ button.process {
 }
 button.process:hover {
   background-color:  rgb(235, 235, 235);
-}
-
-.checkbox {
-  margin: 10px 0px 0px 10px;
-}
-
-.checkbox > label{
-  margin: 5px;
 }
