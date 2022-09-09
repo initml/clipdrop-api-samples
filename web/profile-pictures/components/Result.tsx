@@ -6,16 +6,17 @@ import { parse } from 'path'
 
 interface ResultProps {
   file: File | undefined
-  setRunProcessing : (run_processing: boolean) => void
-  template : string | undefined
-  upscale:string | undefined
+  setRunProcessing: (run_processing: boolean) => void
+  template: string | undefined
+  upscale: string | undefined
 }
 
 export default function Result({
   file,
   template,
   upscale,
-  setRunProcessing}: ResultProps) {
+  setRunProcessing,
+}: ResultProps) {
   const [src, setSrc] = useState<string | undefined>(undefined)
   const [processing, setProcessing] = useState(false)
 
@@ -33,11 +34,7 @@ export default function Result({
     setSrc(newSrc)
     setProcessing(true)
     // return
-    profile_pictures(
-      file,
-      template,
-      upscale,
-      )
+    profile_pictures(file, template, upscale)
       .then(
         (profile_pictures_output) => {
           setSrc(profile_pictures_output.base64)
@@ -68,7 +65,7 @@ export default function Result({
         <img
           src={src}
           className={twMerge(
-            'max-h-[calc(100vh-450px)] rounded-md transition-all duration-700',
+            'mx-auto max-h-[calc(100vh-450px)] rounded-md transition-all duration-700	',
             'border border-opacity-20'
           )}
           alt="Image"
@@ -92,7 +89,7 @@ export default function Result({
             processing ? 'pointer-events-none opacity-0' : ''
           )}
         >
-          <button
+          {/* <button
             onClick={reset}
             className={twMerge(
               'h-full rounded-lg px-10 font-semibold text-black',
@@ -100,7 +97,7 @@ export default function Result({
             )}
           >
             Back
-          </button>
+          </button> */}
           <button
             onClick={() => {
               if (!src) {

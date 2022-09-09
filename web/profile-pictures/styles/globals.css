@@ -85,6 +85,13 @@ button.active {
   border-bottom: 1px solid rgb(235, 235, 235);
   min-width: 140px;
 }
+<<<<<<< Updated upstream
+=======
+.gallery > p:hover {
+  color: #fff;
+  /* background-color: #0062cc; */
+}
+>>>>>>> Stashed changes
 .gallery > p:last-child {
   border-bottom: 0 none;
 }

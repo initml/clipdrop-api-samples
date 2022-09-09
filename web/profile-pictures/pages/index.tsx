@@ -1,81 +1,171 @@
 import type { NextPage } from 'next'
+import { twMerge } from 'tailwind-merge'
+import DropZone from '../components/DropZone'
+
 import Head from 'next/head'
-import { useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
+
 import Landing from '../components/Landing'
+import Progress from '../components/Progress'
 import Result from '../components/Result'
-import Gallery from '../components/Galery'
+import Gallery from '../components/Gallery'
+import STATES from '../components/States'
 import { Templates } from '../profile-pictures/configuration'
+
+type IfProps = {
+  condition: boolean
+  children: JSX.Element
+}
+
+function If({ condition, children }: IfProps) {
+  return condition ? <>{children}</> : <></>
+}
+
+const ALLOWED_FILES = ['image/png', 'image/jpeg']
 
 const Home: NextPage = () => {
   const [file, setFile] = useState<File | undefined>()
   const [run_processing, setRunProcessing] = useState<boolean>(false)
+  const [state, setState] = useState<number>(STATES.TEMPLATE_CHOICE)
 
   // Templates
-  const templates = () => { return Object.values(Templates);};
-  const [selectTemplate, setSelectTemplate] = useState<string | undefined>(undefined);
-  const templateSelection = (template: string): void => {setSelectTemplate(template);};
+  const templates = () => {
+    return Object.values(Templates)
+  }
+  const [selectTemplate, setSelectTemplate] = useState<string | undefined>(
+    undefined
+  )
+  const templateSelection = (template: string): void => {
+    console.log('template selected: ' + template)
+    setState(STATES.IMAGE_UPLOAD)
+    setSelectTemplate(template)
+  }
 
   // Upscale
-  const [upscale, setUpscale] = useState(false);
+  const [upscale, setUpscale] = useState(false)
   const handleUpscale = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUpscale(e.target.checked);
-  };
+    setUpscale(e.target.checked)
+  }
+
+  const handleFilesSelected = useCallback((files: FileList | Array<File>) => {
+    const file = Array.from(files).filter((file) =>
+      ALLOWED_FILES.includes(file.type)
+    )[0]
+
+    if (file) {
+      setFile(file)
+    }
+    if (inputFileRef.current) {
+      inputFileRef.current.value = ''
+    }
+  }, [])
+
+  const [dragging, setDragging] = useState(false)
+  const handleDragging = useCallback((dragging: boolean) => {
+    setDragging(dragging)
+  }, [])
+
+  const inputFileRef = useRef<HTMLInputElement | null>(null)
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center">
+    <div className="flex min-h-screen flex-col items-center">
       <Head>
         <title>ClipDrop Profile Pictures</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <header className="flex w-full justify-between border-b border-black border-opacity-10 px-4 pl-8">
+      {/* <header className="flex w-full justify-between border-b border-black border-opacity-10 px-4 pl-8">
         <div className="flex items-center space-x-4">
           <h1 className="bg-gradient-to-tr from-cyan-500 to-blue-600 bg-clip-text text-xl font-bold text-transparent">
-            <a
-              href=""
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href="" target="_blank" rel="noopener noreferrer">
               ClipDrop Profile Pictures
             </a>
           </h1>
         </div>
-        <div className="flex items-center space-x-12">
-        </div>
-      </header>
+        <div className="flex items-center space-x-12"></div>
+      </header> */}
 
-      <main className="flex w-full flex-1 flex-col items-center justify-center text-center">
-        {file && selectTemplate !== undefined && run_processing ? (
-          <Result
-            file={file}
-            template={selectTemplate}
-            upscale={upscale.toString()}
-            setRunProcessing={setRunProcessing}
-        />
-        ) : (
-          <>
+      <main className="flex w-full flex-1 flex-col items-center text-center">
+        <>
           <div>
-          <Landing file={file} setFile={setFile} />
-
-          <div>
-          <Gallery
-                choices={templates()}
-                choiceSelection={templateSelection}
-              />
-          <button
-          className='process'
-              onClick={(): void => {
-                if (file && selectTemplate !== undefined) {
-                  setRunProcessing(true)}
-                }
-              }        
-            >
-              Process
-          </button>
+            <Landing file={file} setFile={setFile} />
+            <Progress currentState={state} />
+            <div className="w-full py-6">
+              <If condition={state == STATES.TEMPLATE_CHOICE}>
+                <Gallery
+                  choices={templates()}
+                  choiceSelection={templateSelection}
+                />
+              </If>
+              <If condition={state == STATES.IMAGE_UPLOAD}>
+                <>
+                  <div
+                    className={twMerge(
+                      'mt-16',
+                      'w-full overflow-hidden rounded-3xl',
+                      'border-4 border-dashed border-black'
+                    )}
+                  >
+                    <DropZone
+                      onDrop={(files) => handleFilesSelected(files)}
+                      onDrag={handleDragging}
+                    >
+                      <div
+                        className={twMerge(
+                          'flex',
+                          'flex-col items-center justify-center',
+                          'px-8 py-8 text-center sm:py-16',
+                          'cursor-pointer',
+                          'hover:bg-gray-100',
+                          dragging ? 'opacity-50' : ''
+                        )}
+                        onClick={() => inputFileRef.current?.click()}
+                      >
+                        <p className="mx-16 text-center font-bold opacity-100">
+                          {file
+                            ? file.name
+                            : 'Drag & drop an image or click here to select'}
+                        </p>
+                        <input
+                          type="file"
+                          ref={inputFileRef}
+                          className={twMerge(
+                            'absolute top-0 bottom-0 left-0 right-0',
+                            'hidden'
+                          )}
+                          accept={ALLOWED_FILES.join(',')}
+                          onChange={(ev) =>
+                            handleFilesSelected(ev.currentTarget.files ?? [])
+                          }
+                        />
+                      </div>
+                    </DropZone>
+                  </div>
+                  <div class="flex h-36 justify-center space-x-4 pt-20 transition-opacity delay-700 duration-200">
+                    <button
+                      className="h-full rounded-lg bg-gradient-to-tr from-cyan-500 to-blue-600 px-10 font-semibold text-white hover:bg-gradient-to-l"
+                      onClick={(): void => {
+                        if (file && selectTemplate !== undefined) {
+                          setState(STATES.RESULT)
+                        }
+                      }}
+                    >
+                      Process
+                    </button>
+                  </div>
+                </>
+              </If>
+              <If condition={state == STATES.RESULT}>
+                <Result
+                  file={file}
+                  template={selectTemplate}
+                  upscale={upscale.toString()}
+                  setRunProcessing={setRunProcessing}
+                />
+              </If>
+            </div>
           </div>
-        </div>
         </>
-        )}
       </main>
 
       <footer className="mt-4 flex h-24 w-full items-center justify-center space-x-12 border-t">
