@@ -23,7 +23,7 @@ export default function Landing({ file, setFile }: LandingProps) {
     if (inputFileRef.current) {
       inputFileRef.current.value = ''
     }
-  }, [])
+  }, [setFile])
 
   const [dragging, setDragging] = useState(false)
   const handleDragging = useCallback((dragging: boolean) => {

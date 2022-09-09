@@ -23,7 +23,7 @@ export default function Result({
   const reset = useCallback(() => {
     setSrc(undefined)
     setRunProcessing(false)
-  }, [])
+  }, [setRunProcessing])
 
   // Process the image when set
   useEffect(() => {
@@ -52,7 +52,7 @@ export default function Result({
       .finally(() => {
         setProcessing(false)
       })
-  }, [file])
+  }, [file, reset, template, upscale])
 
   return (
     <div className="flex max-w-[850px] flex-col gap-5">

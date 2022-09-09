@@ -141,7 +141,7 @@ const Home: NextPage = () => {
                       </div>
                     </DropZone>
                   </div>
-                  <div class="flex h-36 justify-center space-x-4 pt-20 transition-opacity delay-700 duration-200">
+                  <div className="flex h-36 justify-center space-x-4 pt-20 transition-opacity delay-700 duration-200">
                     <button
                       className="h-full rounded-lg bg-gradient-to-tr from-cyan-500 to-blue-600 px-10 font-semibold text-white hover:bg-gradient-to-l"
                       onClick={(): void => {
