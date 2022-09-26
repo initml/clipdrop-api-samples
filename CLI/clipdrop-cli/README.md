@@ -20,7 +20,7 @@ $ npm install -g @clipdrop/cli
 $ clipdrop COMMAND
 running command...
 $ clipdrop (--version)
-@clipdrop/cli/0.1.5 darwin-arm64 node-v16.15.0
+@clipdrop/cli/0.1.7 darwin-arm64 node-v16.15.0
 $ clipdrop --help [COMMAND]
 USAGE
   $ clipdrop COMMAND
@@ -34,15 +34,6 @@ USAGE
 * [`clipdrop completion generate`](#clipdrop-completion-generate)
 * [`clipdrop completion generate alias ALIAS`](#clipdrop-completion-generate-alias-alias)
 * [`clipdrop help [COMMAND]`](#clipdrop-help-command)
-* [`clipdrop plugins`](#clipdrop-plugins)
-* [`clipdrop plugins:install PLUGIN...`](#clipdrop-pluginsinstall-plugin)
-* [`clipdrop plugins:inspect PLUGIN...`](#clipdrop-pluginsinspect-plugin)
-* [`clipdrop plugins:install PLUGIN...`](#clipdrop-pluginsinstall-plugin-1)
-* [`clipdrop plugins:link PLUGIN`](#clipdrop-pluginslink-plugin)
-* [`clipdrop plugins:uninstall PLUGIN...`](#clipdrop-pluginsuninstall-plugin)
-* [`clipdrop plugins:uninstall PLUGIN...`](#clipdrop-pluginsuninstall-plugin-1)
-* [`clipdrop plugins:uninstall PLUGIN...`](#clipdrop-pluginsuninstall-plugin-2)
-* [`clipdrop plugins update`](#clipdrop-plugins-update)
 * [`clipdrop register-api-key KEY`](#clipdrop-register-api-key-key)
 * [`clipdrop remove-background`](#clipdrop-remove-background)
 * [`clipdrop super-resolution`](#clipdrop-super-resolution)
@@ -70,7 +61,7 @@ EXAMPLES
   $ clipdrop cleanup
 ```
 
-_See code: [dist/commands/cleanup.ts](https://github.com/initml/clipdrop-api-samples/blob/v0.1.5/dist/commands/cleanup.ts)_
+_See code: [dist/commands/cleanup.ts](https://github.com/initml/clipdrop-api-samples/blob/v0.1.7/dist/commands/cleanup.ts)_
 
 ## `clipdrop completion`
 
@@ -159,236 +150,6 @@ DESCRIPTION
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.1.12/src/commands/help.ts)_
 
-## `clipdrop plugins`
-
-List installed plugins.
-
-```
-USAGE
-  $ clipdrop plugins [--core]
-
-FLAGS
-  --core  Show core plugins.
-
-DESCRIPTION
-  List installed plugins.
-
-EXAMPLES
-  $ clipdrop plugins
-```
-
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v2.1.0/src/commands/plugins/index.ts)_
-
-## `clipdrop plugins:install PLUGIN...`
-
-Installs a plugin into the CLI.
-
-```
-USAGE
-  $ clipdrop plugins:install PLUGIN...
-
-ARGUMENTS
-  PLUGIN  Plugin to install.
-
-FLAGS
-  -f, --force    Run yarn install with force flag.
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Installs a plugin into the CLI.
-
-  Can be installed from npm or a git url.
-
-  Installation of a user-installed plugin will override a core plugin.
-
-  e.g. If you have a core plugin that has a 'hello' command, installing a user-installed plugin with a 'hello' command
-  will override the core plugin implementation. This is useful if a user needs to update core plugin functionality in
-  the CLI without the need to patch and update the whole CLI.
-
-ALIASES
-  $ clipdrop plugins add
-
-EXAMPLES
-  $ clipdrop plugins:install myplugin 
-
-  $ clipdrop plugins:install https://github.com/someuser/someplugin
-
-  $ clipdrop plugins:install someuser/someplugin
-```
-
-## `clipdrop plugins:inspect PLUGIN...`
-
-Displays installation properties of a plugin.
-
-```
-USAGE
-  $ clipdrop plugins:inspect PLUGIN...
-
-ARGUMENTS
-  PLUGIN  [default: .] Plugin to inspect.
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Displays installation properties of a plugin.
-
-EXAMPLES
-  $ clipdrop plugins:inspect myplugin
-```
-
-## `clipdrop plugins:install PLUGIN...`
-
-Installs a plugin into the CLI.
-
-```
-USAGE
-  $ clipdrop plugins:install PLUGIN...
-
-ARGUMENTS
-  PLUGIN  Plugin to install.
-
-FLAGS
-  -f, --force    Run yarn install with force flag.
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Installs a plugin into the CLI.
-
-  Can be installed from npm or a git url.
-
-  Installation of a user-installed plugin will override a core plugin.
-
-  e.g. If you have a core plugin that has a 'hello' command, installing a user-installed plugin with a 'hello' command
-  will override the core plugin implementation. This is useful if a user needs to update core plugin functionality in
-  the CLI without the need to patch and update the whole CLI.
-
-ALIASES
-  $ clipdrop plugins add
-
-EXAMPLES
-  $ clipdrop plugins:install myplugin 
-
-  $ clipdrop plugins:install https://github.com/someuser/someplugin
-
-  $ clipdrop plugins:install someuser/someplugin
-```
-
-## `clipdrop plugins:link PLUGIN`
-
-Links a plugin into the CLI for development.
-
-```
-USAGE
-  $ clipdrop plugins:link PLUGIN
-
-ARGUMENTS
-  PATH  [default: .] path to plugin
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Links a plugin into the CLI for development.
-
-  Installation of a linked plugin will override a user-installed or core plugin.
-
-  e.g. If you have a user-installed or core plugin that has a 'hello' command, installing a linked plugin with a 'hello'
-  command will override the user-installed or core plugin implementation. This is useful for development work.
-
-EXAMPLES
-  $ clipdrop plugins:link myplugin
-```
-
-## `clipdrop plugins:uninstall PLUGIN...`
-
-Removes a plugin from the CLI.
-
-```
-USAGE
-  $ clipdrop plugins:uninstall PLUGIN...
-
-ARGUMENTS
-  PLUGIN  plugin to uninstall
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Removes a plugin from the CLI.
-
-ALIASES
-  $ clipdrop plugins unlink
-  $ clipdrop plugins remove
-```
-
-## `clipdrop plugins:uninstall PLUGIN...`
-
-Removes a plugin from the CLI.
-
-```
-USAGE
-  $ clipdrop plugins:uninstall PLUGIN...
-
-ARGUMENTS
-  PLUGIN  plugin to uninstall
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Removes a plugin from the CLI.
-
-ALIASES
-  $ clipdrop plugins unlink
-  $ clipdrop plugins remove
-```
-
-## `clipdrop plugins:uninstall PLUGIN...`
-
-Removes a plugin from the CLI.
-
-```
-USAGE
-  $ clipdrop plugins:uninstall PLUGIN...
-
-ARGUMENTS
-  PLUGIN  plugin to uninstall
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Removes a plugin from the CLI.
-
-ALIASES
-  $ clipdrop plugins unlink
-  $ clipdrop plugins remove
-```
-
-## `clipdrop plugins update`
-
-Update installed plugins.
-
-```
-USAGE
-  $ clipdrop plugins update [-h] [-v]
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Update installed plugins.
-```
-
 ## `clipdrop register-api-key KEY`
 
 Register the ClipDrop API key
@@ -407,7 +168,7 @@ EXAMPLES
   $ clipdrop register-api-key <key>
 ```
 
-_See code: [dist/commands/register-api-key.ts](https://github.com/initml/clipdrop-api-samples/blob/v0.1.5/dist/commands/register-api-key.ts)_
+_See code: [dist/commands/register-api-key.ts](https://github.com/initml/clipdrop-api-samples/blob/v0.1.7/dist/commands/register-api-key.ts)_
 
 ## `clipdrop remove-background`
 
@@ -429,7 +190,7 @@ EXAMPLES
   $ clipdrop remove-background
 ```
 
-_See code: [dist/commands/remove-background.ts](https://github.com/initml/clipdrop-api-samples/blob/v0.1.5/dist/commands/remove-background.ts)_
+_See code: [dist/commands/remove-background.ts](https://github.com/initml/clipdrop-api-samples/blob/v0.1.7/dist/commands/remove-background.ts)_
 
 ## `clipdrop super-resolution`
 
@@ -452,5 +213,5 @@ EXAMPLES
   $ clipdrop super-resolution
 ```
 
-_See code: [dist/commands/super-resolution.ts](https://github.com/initml/clipdrop-api-samples/blob/v0.1.5/dist/commands/super-resolution.ts)_
+_See code: [dist/commands/super-resolution.ts](https://github.com/initml/clipdrop-api-samples/blob/v0.1.7/dist/commands/super-resolution.ts)_
 <!-- commandsstop -->
