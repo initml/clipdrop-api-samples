@@ -20,7 +20,7 @@ $ npm install -g @clipdrop/cli
 $ clipdrop COMMAND
 running command...
 $ clipdrop (--version)
-@clipdrop/cli/0.1.4 darwin-arm64 node-v16.15.0
+@clipdrop/cli/0.1.5 darwin-arm64 node-v16.15.0
 $ clipdrop --help [COMMAND]
 USAGE
   $ clipdrop COMMAND
@@ -70,7 +70,7 @@ EXAMPLES
   $ clipdrop cleanup
 ```
 
-_See code: [dist/commands/cleanup.ts](https://github.com/initml/clipdrop-api-samples/blob/v0.1.4/dist/commands/cleanup.ts)_
+_See code: [dist/commands/cleanup.ts](https://github.com/initml/clipdrop-api-samples/blob/v0.1.5/dist/commands/cleanup.ts)_
 
 ## `clipdrop completion`
 
@@ -407,7 +407,7 @@ EXAMPLES
   $ clipdrop register-api-key <key>
 ```
 
-_See code: [dist/commands/register-api-key.ts](https://github.com/initml/clipdrop-api-samples/blob/v0.1.4/dist/commands/register-api-key.ts)_
+_See code: [dist/commands/register-api-key.ts](https://github.com/initml/clipdrop-api-samples/blob/v0.1.5/dist/commands/register-api-key.ts)_
 
 ## `clipdrop remove-background`
 
@@ -429,7 +429,7 @@ EXAMPLES
   $ clipdrop remove-background
 ```
 
-_See code: [dist/commands/remove-background.ts](https://github.com/initml/clipdrop-api-samples/blob/v0.1.4/dist/commands/remove-background.ts)_
+_See code: [dist/commands/remove-background.ts](https://github.com/initml/clipdrop-api-samples/blob/v0.1.5/dist/commands/remove-background.ts)_
 
 ## `clipdrop super-resolution`
 
@@ -452,5 +452,5 @@ EXAMPLES
   $ clipdrop super-resolution
 ```
 
-_See code: [dist/commands/super-resolution.ts](https://github.com/initml/clipdrop-api-samples/blob/v0.1.4/dist/commands/super-resolution.ts)_
+_See code: [dist/commands/super-resolution.ts](https://github.com/initml/clipdrop-api-samples/blob/v0.1.5/dist/commands/super-resolution.ts)_
 <!-- commandsstop -->
