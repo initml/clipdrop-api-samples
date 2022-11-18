@@ -3,7 +3,7 @@ import { sleep } from './utils'
 const IS_PROD = !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
 const MOCK_API_CALL = IS_PROD && false
 
-const CLIP_API_ENDPOINT = `https://apis.clipdrop.co/remove-background/v1`
+const CLIP_API_ENDPOINT = `https://clipdrop-api.co/remove-background/v1`
 
 export async function clip(item: Item, apiKey: string): Promise<Clip> {
   if (MOCK_API_CALL) {

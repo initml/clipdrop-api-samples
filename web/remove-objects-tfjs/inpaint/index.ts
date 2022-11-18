@@ -1,7 +1,7 @@
 import { createResizedCanvas, resizeImageFile } from './resize'
 import { blobToCanvas, canvasToBlob } from './utils'
 
-const CLEANUP_ENDPOINT = `https://apis.clipdrop.co/cleanup/v1`
+const CLEANUP_ENDPOINT = `https://clipdrop-api.co/cleanup/v1`
 
 const HD_MAX_SIZE = 2048
 const SD_MASK_SIZE = 720

@@ -6,7 +6,7 @@ const IS_PROD = !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
 const MOCK_API_CALL = IS_PROD && false
 
 const VISION_API_ENDPOINT = `https://vision.googleapis.com/v1/images:annotate?key=${process.env.NEXT_PUBLIC_VISION_API_KEY}`
-const CLEANUP_API_ENDPOINT = 'https://apis.clipdrop.co/cleanup/v1'
+const CLEANUP_API_ENDPOINT = 'https://clipdrop-api.co/cleanup/v1'
 
 const getBase64 = async function (file: File) {
   return new Promise((resolve, reject) => {
