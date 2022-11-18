@@ -125,7 +125,7 @@ const interval = setInterval(() => {
 const IS_PROD = !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
 const MOCK_API_CALL = IS_PROD && false
 
-const CLEANUP_API_ENDPOINT = 'https://apis.clipdrop.co/cleanup/v1'
+const CLEANUP_API_ENDPOINT = 'https://clipdrop-api.co/cleanup/v1'
 
 const getImage = async function (file: File): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
