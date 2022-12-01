@@ -40,7 +40,7 @@ const Home: NextPage = () => {
               rel="noopener noreferrer"
             >
               <img
-                src="/TF_js.png"
+                src="https://storage.googleapis.com/clipdrop-static-assets/web/apis/demos/logo-removal/TF_js.png"
                 alt="tfjs logo"
                 className="mr-2 inline h-10"
               />

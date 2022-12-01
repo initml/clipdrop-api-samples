@@ -6,7 +6,7 @@ type Cleanup = {
   base64: string
 }
 
-const MODEL_URL = '/logo-detection/model.json'
+const MODEL_URL = './logo-detection/model.json'
 if (typeof window !== 'undefined') {
   automl.loadImageClassification(MODEL_URL).then((model) => {
     // @ts-ignore
