@@ -1,0 +1,2 @@
+creation_rules:
+  - gcp_kms: projects/arcopypaste/locations/us-central1/keyRings/ml-team/cryptoKeys/research-secrets

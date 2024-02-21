@@ -1,0 +1,7 @@
+enum STATES {
+  TEMPLATE_CHOICE,
+  IMAGE_UPLOAD,
+  RESULT,
+}
+
+export default STATES
