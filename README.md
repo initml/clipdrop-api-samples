@@ -74,3 +74,12 @@ Our [Cleanup.pictures](https://cleanup.pictures/) website
 Or try one of our mobile apps:
 - [iOS](https://apps.apple.com/app/clipdrop-ar-copy-paste/id1512594879)
 - [Android](https://play.google.com/store/apps/details?id=app.arcopypaste)
+# CLI Samples
+
+## [cli/clipdrop-cli](CLI/clipdrop-cli)
+
+A sample cli build with node and tensorflowJS. Remove background, super resolution, and cleanup with object selector powered by tensorflowJS directly from your CLI.
+
+**⚡️ Available on npm:** <https://www.npmjs.com/package/@clipdrop/cli>
+
+![clipdrop-cli](docs/node-cli.gif)

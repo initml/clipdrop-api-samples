@@ -1,0 +1,54 @@
+# Ref : https://docs.github.com/en/actions/publishing-packages/publishing-nodejs-packages
+
+name: clipdrop-cli-deploy
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'CLI/clipdrop-cli/**'
+jobs:
+  deploy-clipdrop-cli:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: CLI/clipdrop-cli
+    steps:
+      - uses: actions/checkout@v3
+      # Setup .npmrc file to publish to npm
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+          registry-url: 'https://registry.npmjs.org'
+      - name: Install dependencies
+        run: npm i
+      - name: Npm build
+        run: npm run build
+      - name: Npm publish
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # - name: Pack tarballs
+      #   run: npx oclif pack tarballs
+      # - name: Upload tarballs to GH
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: Upload tarballs
+      #     path: |
+      #       ./dist/*.tar.gz
+      #       ./dist/*.tar.xz
+      # - name: Upload tarballs to S3
+      #   env:
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #   run: npx oclif upload tarballs
+      # - name: Package version
+      #   id: package-version
+      #   run: |
+      #     - export VERSION="$(awk -F'"' '/"version": ".+"/{ print $4; exit; }' package.json)"
+      #     - echo "::set-output name=p-version::$VERSION"
+      # - name: oclif Promote
+      #   run: |
+      #     - npx oclif promote --version ${{ steps.package-version.outputs.p-version }} --sha ${$GITHUB_SHA:0:7}
+      #     - echo ${$GITHUB_SHA:0:7}
+      
