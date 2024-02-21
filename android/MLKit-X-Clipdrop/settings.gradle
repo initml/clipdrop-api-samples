@@ -1,0 +1,19 @@
+pluginManagement {
+    repositories {
+        jcenter()
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        jcenter()
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.name='MLKit-Vision X ClipDrop'
+include ':app'
